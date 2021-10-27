@@ -1,0 +1,37 @@
+[package]
+name = "minigun"
+version = "1.0.0"
+authors = ["lkadalski <kadalski.lukasz@gmail.com>"]
+edition = "2018"
+license = "MIT"
+description = "Multipurpose CLI HTTP load testing tool"
+repository = "https://github.com/lkadalski/minigun"
+homepage = "https://github.com/lkadalski/minigun"
+keywords = ["terminal", "tui","http","load testing"]
+categories = ["command-line-interface","command-line-utilities", "http", "load-testing"]
+readme = "README.md"
+
+[dependencies]
+structopt = "0.3.20"
+futures = "0.3.15"
+prettytable-rs = "0.8.0"
+itertools = "0.10.1"
+femme = "2.1.1"
+log = "0.4.14"
+ron = "0.7.0"
+serde_json = "1.0.68"
+serde = { version = "1.0.130", features = ["derive"] }
+http-client = "6.5.1"
+
+[dependencies.async-std]
+version = "1.9.0"
+features = ["attributes"]
+
+[dependencies.surf]
+version = "2.3.1"
+features = ["h1-client", "hyper-client", "wasm-client"]
+
+[dev-dependencies]
+assert_cmd = "1.0.2"
+wiremock = "0.5.7"
+predicates = "2.0.3"
