@@ -1,4 +1,5 @@
 use std::str::FromStr;
+use http_client::http_types::headers::{HeaderName, HeaderValue};
 use structopt::StructOpt;
 use surf::http::{Method};
 use crate::errors::CliError;
@@ -25,20 +26,46 @@ impl Options {
     }
 }
 
+//TODO validate headers upfront
 #[derive(Debug, StructOpt, Clone)]
 #[structopt(name = "TargetParameters")]
 pub struct TargetParameters {
-    #[structopt(short, long, default_value = "")]
-    pub body: String,
+    #[structopt(short, long)]
+    pub body: Option<String>,
     /// HTTP Headers to use K: V
     #[structopt(short, long)]
-    pub headers: Option<Vec<String>>,
+    pub headers: Vec<Header>,
     /// HTTP Method
     #[structopt(short, long, default_value = "GET")]
     pub method: Method,
     /// Target URL which should Minigun aim for
     pub url: surf::Url,
 }
+
+#[derive(Debug, Clone)]
+pub struct Header {
+    pub name: HeaderName,
+    pub value: HeaderValue,
+}
+
+impl FromStr for Header {
+    type Err = CliError;
+
+    fn from_str(header: &str) -> Result<Self, Self::Err> {
+        let header_split = match header.find(':') {
+            None => { Err(CliError::ValidationError("Could not find ':' pattern in Header String'".to_string())) }
+            Some(index) => { Ok(index) }
+        }?;
+        let header = header.split_at(header_split);
+        let name = HeaderName::from_str(header.0)?;
+        let value = HeaderValue::from_str(header.1)?;
+        return Ok(Self {
+            name,
+            value,
+        });
+    }
+}
+
 
 #[derive(Debug, StructOpt, Clone)]
 #[structopt(name = "TestParameters")]
@@ -53,8 +80,8 @@ pub struct TestParameters {
     /// Enable debug mode
     pub debug: bool,
     /// Output type: ron or json
-    #[structopt(short, long, default_value = "Cli")]
-    pub output: OutputType,
+    #[structopt(short, long)]
+    pub output: Option<OutputType>,
     /// Use different type of HTTP client from Surf
     #[structopt(long, default_value = "isahc")]
     pub client: HttpClientType,
@@ -83,8 +110,6 @@ impl FromStr for HttpClientType {
 
 #[derive(Debug, StructOpt, Clone, PartialEq)]
 pub enum OutputType {
-    #[structopt(name = "Cli")]
-    Cli,
     #[structopt(name = "Json")]
     Json,
     #[structopt(name = "Ron")]
@@ -98,7 +123,7 @@ impl FromStr for OutputType {
         match s.to_lowercase().as_str() {
             "json" => { Ok(OutputType::Json) }
             "ron" => { Ok(OutputType::Ron) }
-            _ => { Ok(OutputType::Cli) }
+            _ => { Err(CliError::ValidationError(format!("'{}' There is no such output type. Possible values 'ron' or 'json'", s))) }
         }
     }
 }

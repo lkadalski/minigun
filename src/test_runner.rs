@@ -5,8 +5,6 @@ use async_std::channel::{Sender, Receiver};
 use async_std::task;
 use std::time::Instant;
 use surf::middleware::{Next, Middleware};
-use std::str::FromStr;
-use surf::http::headers::{HeaderValue, HeaderName};
 use serde::Serialize;
 
 pub struct TestRunner {
@@ -48,16 +46,14 @@ impl TestRunner {
     }
 
     fn build_request(job: &TestSuiteRequest) -> Request {
-        let mut request = surf::Request::builder(job.params.method, job.params.url.clone())
-            .body(job.params.body.to_string());
-        if let Some(headers) = &job.params.headers {
-            for header in headers {
-                let header = header.split_at(header.find(':').expect("Could not find ':' pattern in Header String"));
-                let name = HeaderName::from_str(header.0).expect("Could not parse Header Name");
-                let value = HeaderValue::from_str(header.1).expect("Could not parse Header Value");
-                request = request.header(name, value);
-            }
+        let mut request = surf::Request::builder(job.params.method, job.params.url.clone());
+        if let Some(body) = &job.params.body {
+            request = request.body(body.as_str())
         }
+        for header in &job.params.headers {
+            request = request.header(&header.name, header.value.clone());
+        }
+
         let request = request.build();
         log::debug!("Request Blueprint built: {:?}", request);
         request
@@ -106,8 +102,8 @@ mod test {
     async fn send_request_perf_test() -> std::io::Result<()> {
         let mut job_sender = async_std::channel::unbounded();
         let target = Arc::new(TargetParameters {
-            body: "".to_string(),
-            headers: None,
+            body: None,
+            headers: vec![],
             method: Method::Get,
             url: "https://example.com".parse().unwrap(),
         });

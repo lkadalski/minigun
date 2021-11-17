@@ -1,4 +1,4 @@
-use crate::options::{Options, TargetParameters, OutputType, HttpClientType};
+use crate::options::{Options, TargetParameters, HttpClientType};
 use crate::test_runner::{TestRunner, TestStatus};
 use crate::report_generator::ReportGenerator;
 use std::time::{Duration, Instant};
@@ -27,7 +27,7 @@ pub fn initialize(test_command: TestCommand)  {
     let test_runner = TestRunner::new(test_request_receiver, report_sender);
     let report_generator = ReportGenerator::new(test_state, report_receiver, test_command.options.test_parameters.output.clone());
 
-    if let OutputType::Cli = test_command.options.test_parameters.output {
+    if let None = test_command.options.test_parameters.output {
         log::info!("Targeting {} with ammo of {} bullets using {} connections", &test_command.options.target_parameters.url, &test_command.options.test_parameters.request_count, &test_command.options.test_parameters.connection_count);
     }
 
@@ -220,10 +220,10 @@ mod tests {
             connection_count: 2,
             request_count: 10,
             debug: false,
-            output: OutputType::Cli,
+            output: None,
             client: HttpClientType::Isahc,
         }, TargetParameters {
-            body: "".to_string(),
+            body: None,
             headers: Some(vec!["Authorization: SomeKey".to_string()]),
             method: Method::Get,
             url: surf::Url::parse("https://example.org").unwrap(),
@@ -243,7 +243,7 @@ mod tests {
             output: OutputType::Cli,
             client: HttpClientType::Isahc
         }, TargetParameters {
-            body: "".to_string(),
+            body: None,
             headers: None,
             method: Method::Get,
             url: surf::Url::parse("https://example.org").unwrap(),

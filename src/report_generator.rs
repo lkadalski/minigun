@@ -15,13 +15,13 @@ use ron::to_string;
 pub struct ReportGenerator {
     test_state: Arc<Mutex<TestState>>,
     pub report_receiver: Receiver<TestResult>,
-    output: OutputType,
+    output: Option<OutputType>,
 }
 
 impl ReportGenerator {
     pub async fn listen_and_generate(self) {
         let handle;
-        if self.output == OutputType::Cli {
+        if let None = &self.output {
             handle = task::spawn(Self::listen_for_a_reports(self));
         } else {
             handle = task::spawn(Self::print_report_to_tty(self));
@@ -48,8 +48,8 @@ impl ReportGenerator {
 
     async fn print_report_to_tty(mut self) {
         while let Some(report) = self.report_receiver.next().await {
-            let message = match self.output {
-                OutputType::Cli => { "Error when consuming report!".to_string() }
+            let output_type = self.output.take().expect("There should be an OutputType");
+            let message = match output_type {
                 OutputType::Json => {
                     serde_json::to_string(&report).expect("Could not write json to std output")
                 }
@@ -88,7 +88,7 @@ impl ReportGenerator {
         status_table.printstd();
     }
 
-    pub fn new(test_state: Arc<Mutex<TestState>>, report_receiver: Receiver<TestResult>, output: OutputType) -> Self {
+    pub fn new(test_state: Arc<Mutex<TestState>>, report_receiver: Receiver<TestResult>, output: Option<OutputType>) -> Self {
         Self {
             test_state,
             report_receiver,
