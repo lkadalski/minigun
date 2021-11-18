@@ -50,9 +50,10 @@ impl TestRunner {
         if let Some(body) = &job.params.body {
             request = request.body(body.as_str())
         }
-        for header in &job.params.headers {
-            request = request.header(&header.name, header.value.clone());
-        }
+        // for header in &job.params.headers {
+        //     request = request.header(&header.name, header.value.clone());
+        // }
+            request = request.header(&job.params.headers.name, job.params.headers.value.clone());
 
         let request = request.build();
         log::debug!("Request Blueprint built: {:?}", request);

@@ -34,7 +34,7 @@ pub struct TargetParameters {
     pub body: Option<String>,
     /// HTTP Headers to use K: V
     #[structopt(short, long)]
-    pub headers: Vec<Header>,
+    pub headers: Header,
     /// HTTP Method
     #[structopt(short, long, default_value = "GET")]
     pub method: Method,
@@ -52,20 +52,26 @@ impl FromStr for Header {
     type Err = CliError;
 
     fn from_str(header: &str) -> Result<Self, Self::Err> {
-        let header_split = match header.find(':') {
-            None => { Err(CliError::ValidationError("Could not find ':' pattern in Header String'".to_string())) }
-            Some(index) => { Ok(index) }
-        }?;
-        let header = header.split_at(header_split);
-        let name = HeaderName::from_str(header.0)?;
-        let value = HeaderValue::from_str(header.1)?;
-        return Ok(Self {
-            name,
-            value,
-        });
+        Err(CliError::ValidationError("problem".to_string()))
+        // let header_split = header.find(":").ok_or_else(||
+        // format!("Invalid format for header. Missing ':' token."))?;
+        // let header = header.split_at(header_split);
+        // let name = HeaderName::from_str(header.0)?;
+        // let value = HeaderValue::from_str(header.1)?;
+        // return Ok(Self {
+        //     name,
+        //     value,
+        // });
     }
+
 }
 
+fn index_of_comma(header: &str)-> Result<usize, CliError> {
+    match header.find(':') {
+        None => { Err(CliError::ValidationError("Could not find ':' pattern in Header String'".to_string())) }
+        Some(index) => { Ok(index) }
+    }
+}
 
 #[derive(Debug, StructOpt, Clone)]
 #[structopt(name = "TestParameters")]
