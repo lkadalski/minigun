@@ -1,25 +1,14 @@
-use crate::test_dispatcher::{TestResult, TestSuiteRequest};
+use crate::test_dispatcher::{Error, TestResult, TestSuiteRequest};
 use crate::errors::{CliError};
 use surf::{Response, Client, Request};
 use async_std::channel::{Sender, Receiver};
 use async_std::task;
 use std::time::Instant;
+use futures::StreamExt;
 use surf::middleware::{Next, Middleware};
 use serde::Serialize;
 
-pub struct TestRunner {
-    pub(crate) test_request_receiver: Receiver<TestSuiteRequest>,
-    pub report_sender: Sender<TestResult>,
-}
-
-impl TestRunner {
-    pub fn new(test_receiver: Receiver<TestSuiteRequest>, report_sender: Sender<TestResult>) -> Self {
-        Self {
-            test_request_receiver: test_receiver,
-            report_sender,
-        }
-    }
-}
+pub struct TestRunner;
 
 #[derive(Debug, Serialize)]
 pub enum TestStatus {
@@ -28,20 +17,22 @@ pub enum TestStatus {
 }
 
 impl TestRunner {
-    pub async fn listen_and_run(self) {
-        while let Ok(task) = self.test_request_receiver.recv().await {
-            log::debug!("Received new TestSuite {:?}", &task);
-            task::spawn(Self::perform_test(task, self.report_sender.clone()));
+    pub async fn run(mut rx_dispatcher: Receiver<TestSuiteRequest>) -> Result<Receiver<TestResult>, Error> {
+        let (tx, rx) = async_std::channel::unbounded();
+        while let Some(suite) = rx_dispatcher.next().await {
+            let tx_result = tx.clone();
+            task::spawn(async move {
+                TestRunner::perform_test(suite, tx_result).await;
+            });
         }
+        Ok(rx)
     }
 
     async fn perform_test(job: TestSuiteRequest, report_sender: Sender<TestResult>) {
         let request = TestRunner::build_request(&job);
         for &test_no in &job.request_count {
             let report = TestRunner::execute(&job, &request, test_no).await;
-            if let Err(err) = report_sender.send(report).await {
-                log::error!("Could not send back a report from test_case {} with err {}", test_no, err);
-            }
+            report_sender.send(report).await.expect(format!("Could not send back a report from test_case {}", test_no).as_str());
         }
     }
 
@@ -50,10 +41,10 @@ impl TestRunner {
         if let Some(body) = &job.params.body {
             request = request.body(body.as_str())
         }
-        // for header in &job.params.headers {
-        //     request = request.header(&header.name, header.value.clone());
-        // }
-            request = request.header(&job.params.headers.name, job.params.headers.value.clone());
+        for header in &job.params.headers {
+            request = request.header(&header.name, header.value.clone());
+        }
+        // request = request.header(&job.params.headers.name, job.params.headers.value.clone());
 
         let request = request.build();
         log::debug!("Request Blueprint built: {:?}", request);

@@ -22,7 +22,7 @@ ron = "0.7.0"
 serde_json = "1.0.68"
 serde = { version = "1.0.130", features = ["derive"] }
 http-client = "6.5.1"
-thiserror = "1.0.30"
+indicatif = "0.16.2"
 anyhow = "1.0.45"
 
 [dependencies.async-std]

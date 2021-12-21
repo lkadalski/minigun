@@ -26,7 +26,6 @@ impl Options {
     }
 }
 
-//TODO validate headers upfront
 #[derive(Debug, StructOpt, Clone)]
 #[structopt(name = "TargetParameters")]
 pub struct TargetParameters {
@@ -34,7 +33,7 @@ pub struct TargetParameters {
     pub body: Option<String>,
     /// HTTP Headers to use K: V
     #[structopt(short, long)]
-    pub headers: Header,
+    pub headers: Vec<Header>,
     /// HTTP Method
     #[structopt(short, long, default_value = "GET")]
     pub method: Method,
@@ -52,16 +51,14 @@ impl FromStr for Header {
     type Err = CliError;
 
     fn from_str(header: &str) -> Result<Self, Self::Err> {
-        Err(CliError::ValidationError("problem".to_string()))
-        // let header_split = header.find(":").ok_or_else(||
-        // format!("Invalid format for header. Missing ':' token."))?;
-        // let header = header.split_at(header_split);
-        // let name = HeaderName::from_str(header.0)?;
-        // let value = HeaderValue::from_str(header.1)?;
-        // return Ok(Self {
-        //     name,
-        //     value,
-        // });
+        let header_split = index_of_comma(&header)?;
+        let header = header.split_at(header_split);
+        let name = HeaderName::from_str(header.0)?;
+        let value = HeaderValue::from_str(header.1)?;
+        return Ok(Self {
+            name,
+            value,
+        });
     }
 
 }
