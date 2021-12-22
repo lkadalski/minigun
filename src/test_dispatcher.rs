@@ -19,7 +19,9 @@ pub fn initialize(test_command: TestCommand)  {
     let output_type = test_command.options.test_parameters.output.clone();
 
     async_std::task::block_on(async move {
-        ReportGenerator::run(TestRunner::run(TestDispatcher::run(test_command).await?).await?, test_state, output_type).await
+        ReportGenerator::run(
+            TestRunner::run(
+                TestDispatcher::run(test_command).await?).await?, test_state, output_type).await
     }).expect("Could not block on async std runtime");
 
 }
@@ -43,7 +45,6 @@ impl TestDispatcher {
             let mut client = surf::Client::with_http_client(client);
             if command.options.test_parameters.debug {
                 log::debug!("DEBUG IS ON");
-                client = client.with(surf::middleware::Logger::new());
             }
             client
         }).collect_vec();

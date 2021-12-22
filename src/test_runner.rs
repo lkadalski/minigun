@@ -1,11 +1,10 @@
 use crate::test_dispatcher::{Error, TestResult, TestSuiteRequest};
 use crate::errors::{CliError};
-use surf::{Response, Client, Request};
+use surf::{Request};
 use async_std::channel::{Sender, Receiver};
 use async_std::task;
 use std::time::Instant;
 use futures::StreamExt;
-use surf::middleware::{Next, Middleware};
 use serde::Serialize;
 
 pub struct TestRunner;
@@ -17,19 +16,24 @@ pub enum TestStatus {
 }
 
 impl TestRunner {
-    pub async fn run(mut rx_dispatcher: Receiver<TestSuiteRequest>) -> Result<Receiver<TestResult>, Error> {
+    pub async fn run(rx_dispatcher: Receiver<TestSuiteRequest>) -> Result<Receiver<TestResult>, Error> {
         let (tx, rx) = async_std::channel::unbounded();
-        while let Some(suite) = rx_dispatcher.next().await {
-            let tx_result = tx.clone();
-            task::spawn(async move {
-                TestRunner::perform_test(suite, tx_result).await;
-            });
-        }
+        task::spawn(Self::listen(rx_dispatcher, tx));
         Ok(rx)
     }
+    async fn listen(mut rx_dispatcher: Receiver<TestSuiteRequest>, tx: Sender<TestResult>) {
+        let mut request = None;
+        while let Some(suite) = rx_dispatcher.next().await {
+            if request.is_none(){
+                request = Some(TestRunner::build_request(&suite));
+            }
+            let request = request.clone().unwrap();
+            let tx_result = tx.clone();
+            task::spawn(TestRunner::perform_test(suite, request,tx_result));
+        }
+    }
 
-    async fn perform_test(job: TestSuiteRequest, report_sender: Sender<TestResult>) {
-        let request = TestRunner::build_request(&job);
+    async fn perform_test(job: TestSuiteRequest, request: Request, report_sender: Sender<TestResult>) {
         for &test_no in &job.request_count {
             let report = TestRunner::execute(&job, &request, test_no).await;
             report_sender.send(report).await.expect(format!("Could not send back a report from test_case {}", test_no).as_str());
@@ -63,23 +67,6 @@ impl TestRunner {
     }
 }
 
-struct Printer;
-
-#[surf::utils::async_trait]
-impl Middleware for Printer {
-    async fn handle(
-        &self,
-        req: Request,
-        client: Client,
-        next: Next<'_>,
-    ) -> surf::Result<Response> {
-        log::debug!("sending a request!");
-        let response = next.run(req, client).await?;
-        log::debug!("request completed!");
-        Ok(response)
-    }
-}
-
 
 #[cfg(test)]
 mod test {
@@ -103,7 +90,7 @@ mod test {
         let job_time = std::time::Instant::now();
 
         let test_request = TestSuiteRequest { client_id: 2, params: target.clone(), client: mutex.clone(), request_count: vec![10, 9, 8, 7, 6, 5, 4, 3, 2, 1] };
-        TestRunner::perform_test(test_request, job_sender.0).await;
+        // TestRunner::perform_test(test_request, , job_sender.0).await;
         if let Some(test_result) = job_sender.1.next().await {
             println!("{:?}", test_result);
         }
