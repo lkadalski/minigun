@@ -13,7 +13,6 @@ use indicatif::{ProgressStyle};
 pub struct ReportGenerator;
 
 impl ReportGenerator {
-    //TODO make a serious test for about a milion of requests
     pub async fn run(rx_result: Receiver<TestResult>, test_state: TestState, output: Option<OutputType>) -> Result<(), Error> {
         let handle;
         if let None = output {
@@ -25,11 +24,12 @@ impl ReportGenerator {
     }
 
     async fn listen_for_a_reports(mut rx_result: Receiver<TestResult>, mut test_state: TestState) -> Result<(), Error> {
-        let progress_bar = indicatif::ProgressBar::new(test_state.expected_request_count).with_style(ProgressStyle::default_bar().template("[{elapsed_precise}] {bar:100.cyan/blue} {pos:>7}/{len:7} [{eta_precise}]"));
+        let progress_bar = indicatif::ProgressBar::new(test_state.expected_request_count).with_style(ProgressStyle::default_bar().template("[Total: {pos:>3}/{len}] [{per_sec}] [{percent}%] [ETA: {eta_precise}] [Elapsed: {elapsed_precise}]\n{wide_bar:.cyan/blue}"));
+        progress_bar.set_draw_rate(10);
         while let Some(report) = rx_result.next().await {
+            progress_bar.inc(1);
             log::debug!("Received report {:?}", &report);
             test_state.test_results.push(report);
-            progress_bar.inc(1)
         }
         progress_bar.finish();
         test_state.stop_timer();

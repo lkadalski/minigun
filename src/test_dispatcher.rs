@@ -42,10 +42,7 @@ impl TestDispatcher {
     fn generate_test_request_suites(command: TestCommand) -> Vec<TestSuiteRequest> {
         let clients = (1..=command.options.test_parameters.connection_count).into_iter().map(|_x| {
             let client = choose_client_backend(&command);
-            let mut client = surf::Client::with_http_client(client);
-            if command.options.test_parameters.debug {
-                log::debug!("DEBUG IS ON");
-            }
+            let client = surf::Client::with_http_client(client);
             client
         }).collect_vec();
         let target_params = Arc::new(command.options.target_parameters.clone());
