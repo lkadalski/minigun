@@ -1,68 +1,57 @@
-use crate::options::{Options, TargetParameters, OutputType, HttpClientType};
+use crate::options::{Options, TargetParameters, HttpClientType};
 use crate::test_runner::{TestRunner, TestStatus};
 use crate::report_generator::ReportGenerator;
 use std::time::{Duration, Instant};
-use futures::{join};
 use async_std::task;
-use async_std::sync::{Arc, Mutex};
-use async_std::channel::{Sender};
+use async_std::channel::{Receiver, Sender};
 use itertools::{Itertools};
 use surf::{Client, StatusCode};
 use std::ops::{Sub};
+use async_std::sync::Arc;
 use femme::LevelFilter;
 use serde::{Serialize};
-use futures::executor::block_on;
-use async_std::task::JoinHandle;
 use http_client::HttpClient;
 
+pub type Error = Box<dyn std::error::Error +Send +Sync +'static>;
 
 pub fn initialize(test_command: TestCommand)  {
-    // Create application state
-    let test_state = Arc::new(Mutex::new(TestState::new()));
-    // Create two async channels
-    let (test_request_sender, test_request_receiver) = async_std::channel::unbounded();
-    let (report_sender, report_receiver) = async_std::channel::unbounded();
-    //create two components job_dispatcher and job_runner
-    let test_dispatcher = TestDispatcher::new(test_request_sender);
-    let test_runner = TestRunner::new(test_request_receiver, report_sender);
-    let report_generator = ReportGenerator::new(test_state, report_receiver, test_command.options.test_parameters.output.clone());
+    let test_state = TestState::new(test_command.options.test_parameters.request_count as u64);
+    let output_type = test_command.options.test_parameters.output.clone();
 
-    if let OutputType::Cli = test_command.options.test_parameters.output {
-        log::info!("Targeting {} with ammo of {} bullets using {} connections", &test_command.options.target_parameters.url, &test_command.options.test_parameters.request_count, &test_command.options.test_parameters.connection_count);
-    }
+    async_std::task::block_on(async move {
+        ReportGenerator::run(
+            TestRunner::run(
+                TestDispatcher::run(test_command).await?).await?, test_state, output_type).await
+    }).expect("Could not block on async std runtime");
 
-    let runner_handle = task::spawn(test_runner.listen_and_run());
-    let dispatcher_handle = task::spawn(test_dispatcher.prepare_and_send(test_command));
-    let generator_handle = task::spawn(report_generator.listen_and_generate());
-    block_on(start(runner_handle, dispatcher_handle, generator_handle));
-}
-
-async fn start(runner_handle: JoinHandle<()>, dispatcher_handle: JoinHandle<()>, generator_handle: JoinHandle<()>) {
-    join!(runner_handle,dispatcher_handle, generator_handle );
 }
 
 impl TestDispatcher {
-    async fn prepare_and_send(self, command: TestCommand) {
-        let test_requests = Self::generate_test_request_suites(&command);
-        for test in test_requests {
-            task::spawn(Self::dispatch_test_suite(test, self.test_sender.clone()));
-        }
+
+    async fn run(command: TestCommand)-> Result<Receiver<TestSuiteRequest>, Error>{
+        let (tx, rx)  = async_std::channel::bounded(1000);
+        let test_requests = Self::generate_test_request_suites(command);
+        task::spawn(async move {
+            for suite in test_requests {
+                tx.send(suite).await.expect("Could not send the generated TestSuite over the channel")
+            }
+        });
+        Ok(rx)
     }
 
-    fn generate_test_request_suites(command: &TestCommand) -> Vec<TestSuiteRequest> {
+    fn generate_test_request_suites(command: TestCommand) -> Vec<TestSuiteRequest> {
         let clients = (1..=command.options.test_parameters.connection_count).into_iter().map(|_x| {
-            let client = choose_client_backend(command);
+            let client = choose_client_backend(&command);
             let mut client = surf::Client::with_http_client(client);
             if command.options.test_parameters.debug {
                 log::debug!("DEBUG IS ON");
-                client = client.with(surf::middleware::Logger::new());
             }
             client
         }).collect_vec();
         let target_params = Arc::new(command.options.target_parameters.clone());
         let mut test_requests = clients.into_iter().enumerate().map(|(id, client)| TestSuiteRequest {
             client_id: id as u32,
-            params: target_params.clone(),
+            params: Arc::clone(&target_params),
             client,
             request_count: vec![],
         }).collect_vec();
@@ -79,13 +68,6 @@ impl TestDispatcher {
             }
         }
         test_requests
-    }
-
-    async fn dispatch_test_suite(test: TestSuiteRequest, test_sender: Sender<TestSuiteRequest>) {
-        log::debug!("Sending {:?}", &test);
-        if let Err(err) = test_sender.send(test).await {
-            log::error!("Could not request a job with err {:?}", err.to_string());
-        }
     }
 }
 
@@ -121,14 +103,16 @@ impl TestCommand {
 #[derive(Debug)]
 pub struct TestState {
     pub test_results: Vec<TestResult>,
+    pub expected_request_count: u64,
     pub start_time: Instant,
     pub finish_time: Instant,
 }
 
 impl TestState {
-    pub fn new() -> Self {
+    pub fn new(request_count: u64) -> Self {
         TestState {
             test_results: vec![],
+            expected_request_count: request_count,
             start_time: Instant::now(),
             finish_time: Instant::now(),
         }
@@ -143,7 +127,7 @@ impl TestState {
 
 impl Default for TestState {
     fn default() -> Self {
-        TestState::new()
+        TestState::new(0)
     }
 }
 
@@ -174,14 +158,6 @@ impl TestSuiteRequest {
 #[derive(Debug)]
 struct TestDispatcher {
     test_sender: Sender<TestSuiteRequest>,
-}
-
-impl TestDispatcher {
-    pub fn new(test_sender: Sender<TestSuiteRequest>) -> Self {
-        Self {
-            test_sender,
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -220,10 +196,10 @@ mod tests {
             connection_count: 2,
             request_count: 10,
             debug: false,
-            output: OutputType::Cli,
+            output: None,
             client: HttpClientType::Isahc,
         }, TargetParameters {
-            body: "".to_string(),
+            body: None,
             headers: Some(vec!["Authorization: SomeKey".to_string()]),
             method: Method::Get,
             url: surf::Url::parse("https://example.org").unwrap(),
@@ -243,7 +219,7 @@ mod tests {
             output: OutputType::Cli,
             client: HttpClientType::Isahc
         }, TargetParameters {
-            body: "".to_string(),
+            body: None,
             headers: None,
             method: Method::Get,
             url: surf::Url::parse("https://example.org").unwrap(),

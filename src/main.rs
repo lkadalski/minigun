@@ -9,7 +9,6 @@ use test_dispatcher::initialize;
 use crate::test_dispatcher::TestCommand;
 
 fn main() {
-    //TODO add TestCommand::new().unwrap_or_else to throw validation errors
     let test_command = TestCommand::new( Box::new( Options::new()));
     initialize(test_command);
 }
