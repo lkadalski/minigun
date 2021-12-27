@@ -1,19 +1,22 @@
-use std::ops::{Add, Div};
-use std::time::{Duration};
-use async_std::task;
-use prettytable::{Table};
-use prettytable::{row, cell};
-use crate::test_dispatcher::{TestState, TestResult, Error};
-use async_std::channel::Receiver;
 use crate::options::OutputType;
-use futures::{StreamExt};
-use indicatif::{ProgressStyle};
-
+use crate::test_dispatcher::{Error, TestResult, TestState};
+use async_std::channel::Receiver;
+use async_std::task;
+use futures::StreamExt;
+use indicatif::ProgressStyle;
+use prettytable::Table;
+use prettytable::{cell, row};
+use std::ops::{Add, Div};
+use std::time::Duration;
 
 pub struct ReportGenerator;
 
 impl ReportGenerator {
-    pub async fn run(rx_result: Receiver<TestResult>, test_state: TestState, output: Option<OutputType>) -> Result<(), Error> {
+    pub async fn run(
+        rx_result: Receiver<TestResult>,
+        test_state: TestState,
+        output: Option<OutputType>,
+    ) -> Result<(), Error> {
         let handle;
         if let None = output {
             handle = task::spawn(Self::listen_for_a_reports(rx_result, test_state));
@@ -23,7 +26,10 @@ impl ReportGenerator {
         handle.await
     }
 
-    async fn listen_for_a_reports(mut rx_result: Receiver<TestResult>, mut test_state: TestState) -> Result<(), Error> {
+    async fn listen_for_a_reports(
+        mut rx_result: Receiver<TestResult>,
+        mut test_state: TestState,
+    ) -> Result<(), Error> {
         let progress_bar = indicatif::ProgressBar::new(test_state.expected_request_count).with_style(ProgressStyle::default_bar().template("[Total: {pos:>3}/{len}] [{per_sec}] [{percent}%] [ETA: {eta_precise}] [Elapsed: {elapsed_precise}]\n{wide_bar:.cyan/blue}"));
         progress_bar.set_draw_rate(10);
         while let Some(report) = rx_result.next().await {
@@ -36,8 +42,10 @@ impl ReportGenerator {
         Self::generate_report(test_state).await
     }
 
-
-    async fn print_report_to_tty(mut rx_result: Receiver<TestResult>, mut output: Option<OutputType>) -> Result<(), Error> {
+    async fn print_report_to_tty(
+        mut rx_result: Receiver<TestResult>,
+        mut output: Option<OutputType>,
+    ) -> Result<(), Error> {
         let output_type = output.take().expect("There should be an OutputType");
         while let Some(report) = rx_result.next().await {
             let message = match output_type {
@@ -58,10 +66,34 @@ impl ReportGenerator {
         let mut status_table = Table::new();
 
         let statistics = calculate_statistics(&test_state);
-        table.add_row(row!["Total Time", "Average Request Time ", "Total Requests"]);
-        table.add_row(row![format!("{:?}", test_state.calculate_duration()), format!("{:?}", statistics.avg_time), format!("{}", test_state.test_results.len())]);
-        status_table.add_row(row!["HTTP codes", "1xx", "2xx", "3xx", "4xx" , "5xx", "Others"]);
-        status_table.add_row(row!["Count", statistics.test_statuses.val_100, statistics.test_statuses.val_200, statistics.test_statuses.val_300, statistics.test_statuses.val_400, statistics.test_statuses.val_500, statistics.test_statuses.err_val]);
+        table.add_row(row![
+            "Total Time",
+            "Average Request Time ",
+            "Total Requests"
+        ]);
+        table.add_row(row![
+            format!("{:?}", test_state.calculate_duration()),
+            format!("{:?}", statistics.avg_time),
+            format!("{}", test_state.test_results.len())
+        ]);
+        status_table.add_row(row![
+            "HTTP codes",
+            "1xx",
+            "2xx",
+            "3xx",
+            "4xx",
+            "5xx",
+            "Others"
+        ]);
+        status_table.add_row(row![
+            "Count",
+            statistics.test_statuses.val_100,
+            statistics.test_statuses.val_200,
+            statistics.test_statuses.val_300,
+            statistics.test_statuses.val_400,
+            statistics.test_statuses.val_500,
+            statistics.test_statuses.err_val
+        ]);
 
         table.printstd();
         status_table.printstd();

@@ -1,9 +1,8 @@
-use std::fmt::{Display, Formatter, Debug};
-use http_client::http_types::Error;
-use serde::{Serialize};
-use CliError::ConnectionError;
 use crate::errors::CliError::ValidationError;
-
+use http_client::http_types::Error;
+use serde::Serialize;
+use std::fmt::{Debug, Display, Formatter};
+use CliError::ConnectionError;
 
 impl From<http_client::http_types::Error> for CliError {
     fn from(err: Error) -> Self {

@@ -1,11 +1,14 @@
-use std::str::FromStr;
-use http_client::http_types::headers::{HeaderName, HeaderValue};
-use structopt::StructOpt;
-use surf::http::{Method};
 use crate::errors::CliError;
+use http_client::http_types::headers::{HeaderName, HeaderValue};
+use std::str::FromStr;
+use structopt::StructOpt;
+use surf::http::Method;
 
 #[derive(Debug, StructOpt, Clone)]
-#[structopt(name = "Minigun", about = "CLI Multipurpose HTTP benchmarking tool written in Rust")]
+#[structopt(
+    name = "Minigun",
+    about = "CLI Multipurpose HTTP benchmarking tool written in Rust"
+)]
 pub struct Options {
     #[structopt(flatten)]
     pub target_parameters: TargetParameters,
@@ -55,18 +58,16 @@ impl FromStr for Header {
         let header = header.split_at(header_split);
         let name = HeaderName::from_str(header.0)?;
         let value = HeaderValue::from_str(header.1)?;
-        return Ok(Self {
-            name,
-            value,
-        });
+        return Ok(Self { name, value });
     }
-
 }
 
-fn index_of_comma(header: &str)-> Result<usize, CliError> {
+fn index_of_comma(header: &str) -> Result<usize, CliError> {
     match header.find(':') {
-        None => { Err(CliError::ValidationError("Could not find ':' pattern in Header String'".to_string())) }
-        Some(index) => { Ok(index) }
+        None => Err(CliError::ValidationError(
+            "Could not find ':' pattern in Header String'".to_string(),
+        )),
+        Some(index) => Ok(index),
     }
 }
 
@@ -102,14 +103,16 @@ impl FromStr for HttpClientType {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_lowercase().as_str() {
-            "isahc" => { Ok(HttpClientType::Isahc) }
-            "h1" => { Ok(HttpClientType::H1) }
-            "hyper" => { Ok(HttpClientType::Hyper) }
-            _ => { Err(CliError::ValidationError(format!("Could not choose client {}", s))) }
+            "isahc" => Ok(HttpClientType::Isahc),
+            "h1" => Ok(HttpClientType::H1),
+            "hyper" => Ok(HttpClientType::Hyper),
+            _ => Err(CliError::ValidationError(format!(
+                "Could not choose client {}",
+                s
+            ))),
         }
     }
 }
-
 
 #[derive(Debug, StructOpt, Clone, PartialEq)]
 pub enum OutputType {
@@ -124,9 +127,12 @@ impl FromStr for OutputType {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_lowercase().as_str() {
-            "json" => { Ok(OutputType::Json) }
-            "ron" => { Ok(OutputType::Ron) }
-            _ => { Err(CliError::ValidationError(format!("'{}' There is no such output type. Possible values 'ron' or 'json'", s))) }
+            "json" => Ok(OutputType::Json),
+            "ron" => Ok(OutputType::Ron),
+            _ => Err(CliError::ValidationError(format!(
+                "'{}' There is no such output type. Possible values 'ron' or 'json'",
+                s
+            ))),
         }
     }
 }

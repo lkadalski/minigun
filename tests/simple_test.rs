@@ -1,9 +1,7 @@
-use std::time::{Duration, Instant};
 use assert_cmd::Command;
-use wiremock::{MockServer, Mock, ResponseTemplate};
-use wiremock::matchers::{method, path};
 use predicates::prelude::*;
-
+use wiremock::matchers::{method, path};
+use wiremock::{Mock, MockServer, ResponseTemplate};
 
 #[async_std::test]
 async fn test_defaults_with_10_requests() {
@@ -34,7 +32,9 @@ async fn test_advanced_with_20_requests_2_connections() {
 
     let url = format!("{}", format!("{}/index", &mock_server.uri()));
 
-    let cli = Command::cargo_bin("minigun").unwrap().arg(url)
+    let cli = Command::cargo_bin("minigun")
+        .unwrap()
+        .arg(url)
         .args(&["-r", "20"])
         .args(&["-c", "2"])
         .args(&["-h", "Authorization: SomeKey"])
@@ -56,12 +56,16 @@ async fn test_output_as_ron() {
 
     let url = format!("{}", format!("{}/index", &mock_server.uri()));
 
-    Command::cargo_bin("minigun").unwrap().arg(url)
+    Command::cargo_bin("minigun")
+        .unwrap()
+        .arg(url)
         .args(&["-r", "1"])
         .args(&["-c", "1"])
         .args(&["-o", "ron"])
         .assert()
-        .stdout(predicate::str::starts_with("(client_id:0,test_id:1,job_status:Finished,duration:(secs:0,"))
+        .stdout(predicate::str::starts_with(
+            "(client_id:0,test_id:1,job_status:Finished,duration:(secs:0,",
+        ))
         .stdout(predicate::str::ends_with("),status:Some(200))\n"))
         .success();
 }
@@ -77,7 +81,9 @@ async fn test_advanced_with_2k_requests_20_connections() {
         .await;
 
     let url = format!("{}", format!("{}/index", &mock_server.uri()));
-    Command::cargo_bin("minigun").unwrap().arg(url)
+    Command::cargo_bin("minigun")
+        .unwrap()
+        .arg(url)
         .args(&["-r", "2000"])
         .args(&["-c", "20"])
         .args(&["-o", "ron"])
