@@ -3,7 +3,7 @@ use crate::test_runner::{TestRunner, TestStatus};
 use crate::report_generator::ReportGenerator;
 use std::time::{Duration, Instant};
 use async_std::task;
-use async_std::channel::{Receiver, Sender};
+use async_std::channel::{Receiver};
 use itertools::{Itertools};
 use surf::{Client, StatusCode};
 use std::ops::{Sub};
@@ -12,9 +12,9 @@ use femme::LevelFilter;
 use serde::{Serialize};
 use http_client::HttpClient;
 
-pub type Error = Box<dyn std::error::Error +Send +Sync +'static>;
+pub type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
-pub fn initialize(test_command: TestCommand)  {
+pub fn initialize(test_command: TestCommand) {
     let test_state = TestState::new(test_command.options.test_parameters.request_count as u64);
     let output_type = test_command.options.test_parameters.output.clone();
 
@@ -23,13 +23,11 @@ pub fn initialize(test_command: TestCommand)  {
             TestRunner::run(
                 TestDispatcher::run(test_command).await?).await?, test_state, output_type).await
     }).expect("Could not block on async std runtime");
-
 }
 
 impl TestDispatcher {
-
-    async fn run(command: TestCommand)-> Result<Receiver<TestSuiteRequest>, Error>{
-        let (tx, rx)  = async_std::channel::bounded(1000);
+    async fn run(command: TestCommand) -> Result<Receiver<TestSuiteRequest>, Error> {
+        let (tx, rx) = async_std::channel::bounded(1000);
         let test_requests = Self::generate_test_request_suites(command);
         task::spawn(async move {
             for suite in test_requests {
@@ -152,39 +150,39 @@ impl TestSuiteRequest {
     }
 }
 
-#[derive(Debug)]
-struct TestDispatcher {
-    test_sender: Sender<TestSuiteRequest>,
-}
-
-#[derive(Debug)]
-struct Report {
-    http_status: String,
-    time: Duration,
-}
+struct TestDispatcher;
 
 #[cfg(test)]
 mod tests {
+    use std::str::FromStr;
     use assert_cmd::Command;
+    use http_client::http_types::Method;
+    use mockito::{mock};
     use crate::test_dispatcher::{TestDispatcher, TestCommand};
-    use crate::options::{Options, TargetParameters, TestParameters, OutputType, HttpClientType};
-    use surf::http::Method;
+    use crate::options::{Options, TargetParameters, TestParameters, HttpClientType, Header};
+
 
     #[test]
     fn run_with_defaults() {
         Command::cargo_bin("minigun")
             .expect("Binary exists")
-            .arg("http://127.0.0.1")
+            .arg(mockito::server_url())
             .assert().success();
     }
 
     #[async_std::test]
     async fn test_surf_performance() {
+        let mock = mock("GET", "/")
+            .with_status(200)
+            .with_body("OK")
+            .expect_at_least(10)
+            .create();
         for _x in 0..10 {
             let time = std::time::Instant::now();
-            let response = surf::get("https://example.org").await;
-            println!("Time for {} status is {:?}", response.unwrap().status(), time.elapsed())
+            let response = surf::get(mockito::server_url()).await.expect("Could not send request");
+            println!("Time for {} status is {:?}", response.status(), time.elapsed());
         }
+        mock.assert()
     }
 
     #[test]
@@ -197,12 +195,12 @@ mod tests {
             client: HttpClientType::Isahc,
         }, TargetParameters {
             body: None,
-            headers: Some(vec!["Authorization: SomeKey".to_string()]),
+            headers: vec![Header::from_str("Authorization: SomeKey").unwrap()],
             method: Method::Get,
-            url: surf::Url::parse("https://example.org").unwrap(),
+            url: mockito::server_url().parse().unwrap(),
         });
         let command = TestCommand::new(Box::new(options));
-        let tests = TestDispatcher::generate_test_request_suites(&command);
+        let tests = TestDispatcher::generate_test_request_suites(command);
         assert_eq!(tests[0].request_count.len(), 5);
         assert_eq!(tests[1].request_count.len(), 5)
     }
@@ -213,16 +211,16 @@ mod tests {
             connection_count: 3,
             request_count: 40,
             debug: false,
-            output: OutputType::Cli,
-            client: HttpClientType::Isahc
+            output: None,
+            client: HttpClientType::Isahc,
         }, TargetParameters {
             body: None,
-            headers: None,
+            headers: vec![],
             method: Method::Get,
             url: surf::Url::parse("https://example.org").unwrap(),
         });
         let command = TestCommand::new(Box::new(options));
-        let tests = TestDispatcher::generate_test_request_suites(&command);
+        let tests = TestDispatcher::generate_test_request_suites(command);
         assert_eq!(tests[0].request_count.len(), 14);
         assert_eq!(tests[1].request_count.len(), 13);
         assert_eq!(tests[1].request_count.len(), 13)

@@ -24,12 +24,12 @@ impl TestRunner {
     async fn listen(mut rx_dispatcher: Receiver<TestSuiteRequest>, tx: Sender<TestResult>) {
         let mut request = None;
         while let Some(suite) = rx_dispatcher.next().await {
-            if request.is_none(){
+            if request.is_none() {
                 request = Some(TestRunner::build_request(&suite));
             }
             let request = request.clone().unwrap();
             let tx_result = tx.clone();
-            task::spawn(TestRunner::perform_test(suite, request,tx_result));
+            task::spawn(TestRunner::perform_test(suite, request, tx_result));
         }
     }
 
@@ -73,29 +73,35 @@ mod test {
     use crate::options::TargetParameters;
     use crate::test_dispatcher::TestSuiteRequest;
     use crate::test_runner::TestRunner;
-    use futures::StreamExt;
     use surf::http::Method;
     use async_std::sync::Arc;
+    use http_client::http_types::StatusCode;
+    use mockito::{mock};
 
     #[async_std::test]
     async fn send_request_perf_test() -> std::io::Result<()> {
-        let mut job_sender = async_std::channel::unbounded();
+        let mock = mock("GET", "/hello")
+            .with_status(200)
+            .with_body("OK")
+            .create();
+        let job_sender = async_std::channel::unbounded();
         let target = Arc::new(TargetParameters {
             body: None,
             headers: vec![],
             method: Method::Get,
-            url: "https://example.com".parse().unwrap(),
+            url: format!("{}/hello", mockito::server_url()).parse().unwrap(),
         });
-        let mutex = surf::Client::new();
-        let job_time = std::time::Instant::now();
+        let client = surf::Client::new();
 
-        let test_request = TestSuiteRequest { client_id: 2, params: target.clone(), client: mutex.clone(), request_count: vec![10, 9, 8, 7, 6, 5, 4, 3, 2, 1] };
-        // TestRunner::perform_test(test_request, , job_sender.0).await;
-        if let Some(test_result) = job_sender.1.next().await {
-            println!("{:?}", test_result);
+        let test_request = TestSuiteRequest { client_id: 2, params: target, client, request_count: vec![10, 9, 8, 7, 6, 5, 4, 3, 2, 1] };
+        job_sender.0.send(test_request).await.expect("Could not send a message");
+        let output = TestRunner::run(job_sender.1).await;
+        if let Ok(receiver) = output {
+            if let Ok(result) = receiver.recv().await {
+                assert_eq!(result.status.unwrap(), StatusCode::Ok)
+            }
         }
-        println!("Test time {:?}", job_time.elapsed());
-
+        mock.assert();
         Ok(())
     }
 }
