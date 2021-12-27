@@ -77,7 +77,6 @@ async fn test_advanced_with_2k_requests_20_connections() {
         .await;
 
     let url = format!("{}", format!("{}/index", &mock_server.uri()));
-    let start_time = Instant::now();
     Command::cargo_bin("minigun").unwrap().arg(url)
         .args(&["-r", "2000"])
         .args(&["-c", "20"])
@@ -86,5 +85,4 @@ async fn test_advanced_with_2k_requests_20_connections() {
         .stdout(predicate::str::starts_with("(client_id:"))
         .stdout(predicate::str::ends_with("),status:Some(200))\n"))
         .success();
-    assert!(start_time.elapsed()< Duration::from_millis(1000));
 }
