@@ -15,12 +15,14 @@ use surf::{Client, StatusCode};
 pub type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
 pub fn initialize(test_command: TestCommand) {
-    let test_state = TestState::new(test_command.options.test_parameters.request_count as u64);
+    let test_state = TestState::new(u64::from(
+        test_command.options.test_parameters.request_count,
+    ));
     let output_type = test_command.options.test_parameters.output.clone();
 
     async_std::task::block_on(async move {
         ReportGenerator::run(
-            TestRunner::run(TestDispatcher::run(test_command).await?).await?,
+            TestRunner::run(TestDispatcher::run(&test_command).await?).await?,
             test_state,
             output_type,
         )
@@ -30,26 +32,25 @@ pub fn initialize(test_command: TestCommand) {
 }
 
 impl TestDispatcher {
-    async fn run(command: TestCommand) -> Result<Receiver<TestSuiteRequest>, Error> {
+    async fn run(command: &TestCommand) -> Result<Receiver<TestSuiteRequest>, Error> {
         let (tx, rx) = async_std::channel::bounded(1000);
         let test_requests = Self::generate_test_request_suites(command);
         task::spawn(async move {
             for suite in test_requests {
                 tx.send(suite)
                     .await
-                    .expect("Could not send the generated TestSuite over the channel")
+                    .expect("Could not send the generated TestSuite over the channel");
             }
         });
         Ok(rx)
     }
 
-    fn generate_test_request_suites(command: TestCommand) -> Vec<TestSuiteRequest> {
+    fn generate_test_request_suites(command: &TestCommand) -> Vec<TestSuiteRequest> {
         let clients = (1..=command.options.test_parameters.connection_count)
             .into_iter()
             .map(|_x| {
-                let client = choose_client_backend(&command);
-                let client = surf::Client::with_http_client(client);
-                client
+                let client = choose_client_backend(command);
+                surf::Client::with_http_client(client)
             })
             .collect_vec();
         let target_params = Arc::new(command.options.target_parameters.clone());
@@ -192,7 +193,7 @@ mod tests {
                 time.elapsed()
             );
         }
-        mock.assert()
+        mock.assert();
     }
 
     #[test]
@@ -213,9 +214,9 @@ mod tests {
             },
         );
         let command = TestCommand::new(Box::new(options));
-        let tests = TestDispatcher::generate_test_request_suites(command);
+        let tests = TestDispatcher::generate_test_request_suites(&command);
         assert_eq!(tests[0].request_count.len(), 5);
-        assert_eq!(tests[1].request_count.len(), 5)
+        assert_eq!(tests[1].request_count.len(), 5);
     }
 
     #[test]
@@ -236,9 +237,9 @@ mod tests {
             },
         );
         let command = TestCommand::new(Box::new(options));
-        let tests = TestDispatcher::generate_test_request_suites(command);
+        let tests = TestDispatcher::generate_test_request_suites(&command);
         assert_eq!(tests[0].request_count.len(), 14);
         assert_eq!(tests[1].request_count.len(), 13);
-        assert_eq!(tests[1].request_count.len(), 13)
+        assert_eq!(tests[1].request_count.len(), 13);
     }
 }
