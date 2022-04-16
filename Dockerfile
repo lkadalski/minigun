@@ -1,17 +1,25 @@
-FROM rust:alpine3.14 as builder
+# -*- mode: dockerfile -*-
+#
+# An example Dockerfile showing how to build a Rust executable using this
+# image, and deploy it with a tiny Alpine Linux container.
 
-WORKDIR /app
+# You can override this `--build-arg BASE_IMAGE=...` to use different
+# version of Rust or OpenSSL.
+ARG BASE_IMAGE=ekidd/rust-musl-builder:latest
 
-RUN apk upgrade --update-cache --available && \
-    apk add --no-cache musl-dev openssl-dev pkgconfig  && \
-        rm -rf /var/cache/apk/*
-# create a new empty project
-COPY ./src src
-COPY ./vendor vendor
-COPY ./.cargo .cargo
-COPY Cargo.toml Cargo.lock ./
-# build with x86_64-unknown-linux-musl to make it run with alpine.
-RUN cargo install --path . --target=x86_64-unknown-linux-musl --profile release
-COPY /usr/local/cargo/bin/* /usr/local/bin/
-RUN cargo clean -p minigun
-CMD ["minigun"]
+# Our first FROM statement declares the build environment.
+FROM ${BASE_IMAGE} AS builder
+
+# Add our source code.
+ADD --chown=rust:rust . ./
+
+# Build our application.
+RUN cargo build --release
+
+# Now, we need to build our _real_ Docker container, copying in `using-sqlx`.
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+COPY --from=builder \
+    /home/rust/src/target/x86_64-unknown-linux-musl/release/minigun \
+    /usr/local/bin/
+CMD /usr/local/bin/minigun
