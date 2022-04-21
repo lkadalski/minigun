@@ -42,16 +42,16 @@ impl TestRunner {
     ) {
         for &test_no in &job.request_count {
             let report = TestRunner::execute(&job, &request, test_no).await;
-            report_sender.send(report).await.expect(
-                format!("Could not send back a report from test_case {}", test_no).as_str(),
-            );
+            report_sender.send(report).await.unwrap_or_else(|_| {
+                panic!("Could not send back a report from test_case {}", test_no);
+            });
         }
     }
 
     fn build_request(job: &TestSuiteRequest) -> Request {
         let mut request = surf::Request::builder(job.params.method, job.params.url.clone());
         if let Some(body) = &job.params.body {
-            request = request.body(body.as_str())
+            request = request.body(body.as_str());
         }
         for header in &job.params.headers {
             request = request.header(&header.name, header.value.clone());
@@ -129,7 +129,7 @@ mod test {
         let output = TestRunner::run(job_sender.1).await;
         if let Ok(receiver) = output {
             if let Ok(result) = receiver.recv().await {
-                assert_eq!(result.status.unwrap(), StatusCode::Ok)
+                assert_eq!(result.status.unwrap(), StatusCode::Ok);
             }
         }
         mock.assert();

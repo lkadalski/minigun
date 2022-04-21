@@ -27,10 +27,7 @@ impl std::error::Error for CliError {}
 impl Display for CliError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            ValidationError(ref message) => {
-                write!(f, "{}", message)
-            }
-            ConnectionError(ref message) => {
+            ValidationError(ref message) | ConnectionError(ref message) => {
                 write!(f, "{}", message)
             }
         }

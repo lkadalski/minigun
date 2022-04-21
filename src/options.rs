@@ -54,11 +54,11 @@ impl FromStr for Header {
     type Err = CliError;
 
     fn from_str(header: &str) -> Result<Self, Self::Err> {
-        let header_split = index_of_comma(&header)?;
+        let header_split = index_of_comma(header)?;
         let header = header.split_at(header_split);
         let name = HeaderName::from_str(header.0)?;
         let value = HeaderValue::from_str(header.1)?;
-        return Ok(Self { name, value });
+        Ok(Self { name, value })
     }
 }
 

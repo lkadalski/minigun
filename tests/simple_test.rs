@@ -13,7 +13,7 @@ async fn test_defaults_with_10_requests() {
         .mount(&mock_server)
         .await;
 
-    let url = format!("{}", format!("{}/index", &mock_server.uri()));
+    let url = format!("{}/index", &mock_server.uri());
 
     let cli = Command::cargo_bin("minigun").unwrap().arg(url).assert();
 
@@ -30,7 +30,7 @@ async fn test_advanced_with_20_requests_2_connections() {
         .mount(&mock_server)
         .await;
 
-    let url = format!("{}", format!("{}/index", &mock_server.uri()));
+    let url = format!("{}/index", &mock_server.uri());
 
     let cli = Command::cargo_bin("minigun")
         .unwrap()
@@ -54,7 +54,7 @@ async fn test_output_as_ron() {
         .mount(&mock_server)
         .await;
 
-    let url = format!("{}", format!("{}/index", &mock_server.uri()));
+    let url = format!("{}/index", &mock_server.uri());
 
     Command::cargo_bin("minigun")
         .unwrap()
@@ -80,7 +80,7 @@ async fn test_advanced_with_2k_requests_20_connections() {
         .mount(&mock_server)
         .await;
 
-    let url = format!("{}", format!("{}/index", &mock_server.uri()));
+    let url = format!("{}/index", &mock_server.uri());
     Command::cargo_bin("minigun")
         .unwrap()
         .arg(url)

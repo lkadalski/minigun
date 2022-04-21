@@ -36,7 +36,7 @@ jobs:
           args: --all -- --check
 
   clippy:
-    name: Clippy
+    name: Clippy Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -45,9 +45,11 @@ jobs:
           toolchain: stable
           override: true
           components: clippy
-      - uses: actions-rs/clippy-check@v1
+      - name: Check Lints
+        uses: actions-rs/cargo@v1
         with:
-          token: ${{ secrets.TOKEN }}
+          command: clippy
+          timeout-minutes: 5
           args: -- -D clippy::pedantic -A clippy::must_use_candidate -A clippy::cast_precision_loss -A clippy::cast_possible_truncation -A clippy::cast_possible_wrap -A clippy::cast_sign_loss -A clippy::mut_mut
 
 

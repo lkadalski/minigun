@@ -17,13 +17,11 @@ impl ReportGenerator {
         test_state: TestState,
         output: Option<OutputType>,
     ) -> Result<(), Error> {
-        let handle;
-        if let None = output {
-            handle = task::spawn(Self::listen_for_a_reports(rx_result, test_state));
+        if output.is_none() {
+            task::spawn(Self::listen_for_a_reports(rx_result, test_state)).await
         } else {
-            handle = task::spawn(Self::print_report_to_tty(rx_result, output));
+            task::spawn(Self::print_report_to_tty(rx_result, output)).await
         }
-        handle.await
     }
 
     async fn listen_for_a_reports(
