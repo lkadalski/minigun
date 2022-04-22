@@ -19,9 +19,24 @@ env:
 
 
 jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Semantic Release
+      uses: cycjimmy/semantic-release-action@v2
+      with:
+        extra_plugins: |
+          @semantic-release/git
+          @semantic-release/exec
+          @semantic-release/changelog
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}   
   build:
     name: Build release
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: [ version ]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -51,22 +66,6 @@ jobs:
       env:
         CARGO_PROFILE_RELEASE_LTO: true
         CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
-
-  publish:
-    needs: [ build ]
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-    - name: Semantic Release
-      uses: cycjimmy/semantic-release-action@v2
-      with:
-        extra_plugins: |
-          @semantic-release/git
-          @semantic-release/exec
-          @semantic-release/changelog
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}   
     - name: Releasing assets
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
