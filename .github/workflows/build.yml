@@ -1,6 +1,12 @@
 name: build
 
-on: [push, pull_request]
+on:
+  workflow_call:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: master
 
 env:
   CARGO_TERM_COLOR: always
