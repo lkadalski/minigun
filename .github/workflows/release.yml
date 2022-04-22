@@ -51,16 +51,7 @@ jobs:
       env:
         CARGO_PROFILE_RELEASE_LTO: true
         CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
-    - name: Releasing assets
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: |
-          target/${{ matrix.target }}/release/minigun${{ matrix.suffix }}
-          README.md
-          LICENSE
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
   publish:
     needs: [ build ]
     runs-on: ubuntu-latest
@@ -74,3 +65,13 @@ jobs:
           @semantic-release/git
           @semantic-release/exec
           @semantic-release/changelog
+    - name: Releasing assets
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          target/${{ matrix.target }}/release/minigun${{ matrix.suffix }}
+          README.md
+          LICENSE
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
