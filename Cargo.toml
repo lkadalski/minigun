@@ -24,7 +24,7 @@ serde = { version = "1.0.130", features = ["derive"] }
 http-client = "6.5.1"
 indicatif = "0.16.2"
 anyhow = "1.0.45"
-mockito = "0.30.0"
+mockito = "0.31.0"
 
 [dependencies.async-std]
 version = "1.9.0"
