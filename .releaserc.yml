@@ -1,0 +1,18 @@
+branches:
+  - +([0-9])?(.{+([0-9]),x}).x
+  - master
+  - name: beta
+    prerelease: true
+  - name: alpha
+    prerelease: true
+
+plugins:
+    - '@semantic-release/commit-analyzer'
+    - '@semantic-release/release-notes-generator'
+    - '@semantic-release/github'
+    - - '@semantic-release/exec'
+      - verifyConditionsCmd: "./target/release/semantic-release-rust verify-conditions"
+        prepareCmd: "./target/release/semantic-release-rust prepare ${nextRelease.version}"
+        publishCmd: "./target/release/semantic-release-rust publish"
+    - - '@semantic-release/git'
+      - assets: Cargo.toml
