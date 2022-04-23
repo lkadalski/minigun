@@ -1,4 +1,4 @@
-# <center> MINIGUN  🦀 </center>
+# <p align="center"> MINIGUN  🦀 </p>
 
 [//]: # (<p align="center">)
 
@@ -57,7 +57,7 @@
         - [binary](#binary)
       - [Usage](#usage)
   - [Documentation 📚](#documentation-)
-  - [Contributing and issues 🤝🏻](#contributing-and-issues-)
+  - [Contributing and issues 🤝](#contributing-and-issues-)
   - [Changelog ⏳](#changelog-)
   - [License 📃](#license-)
 
@@ -109,7 +109,7 @@ TBD
 
 ---
 
-## Contributing and issues 🤝🏻
+## Contributing and issues 🤝
 
 Contributions, bug reports, new features and questions are welcome! 😉
 If you have any question or concern, or you want to suggest a new feature, or you want just want to improve minigun, feel 
