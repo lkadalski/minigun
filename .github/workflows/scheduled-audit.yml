@@ -1,9 +1,9 @@
-name: Security audit
+name: Daily security audit
 on:
   schedule:
     - cron: '0 0 * * *'
 jobs:
-  audit:
+  daily_audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
