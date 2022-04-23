@@ -1,4 +1,7 @@
 name: Security audit
+env:
+ GITHUB_TOKEN: ${{ secrets.TOKEN }}
+  
 on:
   pull_request:
     paths: '**/Cargo.lock'
