@@ -60,7 +60,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: minigun_${{ matrix.target }}${{ matrix.suffix }}
-        path: target/${{ matrix.target }}/release/minigun_${{ matrix.target }}${{ matrix.suffix }}
+        path: target/${{ matrix.target }}/release/minigun${{ matrix.suffix }}
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
   publish:
