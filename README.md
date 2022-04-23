@@ -1,4 +1,4 @@
-# <center> MINIGUN  🦀
+# <center> MINIGUN  🦀 </center>
 
 [//]: # (<p align="center">)
 
@@ -49,7 +49,6 @@
 
 ---
 
-- [minigun](#minigun)
 - [About minigun 👑](#about-minigun-)
   - [Get started 🏁](#get-started-)
       - [Installation](#installation)
@@ -69,17 +68,23 @@
 
 Minigun is a HTTP(S) benchmarking tool. It is written in Rust programming language.
 It's highly inspired by https://github.com/codesenberg/bombardier but it's far from it's usefulness.
+From my personal tests, current implementation is far more faster that `bombardier`s. Please test it yourself!
 
 ---
 
 # Get started 🏁
 
 ## Installation
-
+There are few methods to obtain binary:
 
 ### cargo
+TBD
 ### docker
+TBD
 ### binary
+See [releases](https://github.com/lkadalski/minigun/releases)
+
+or build from source!
 
 ---
 
@@ -87,16 +92,20 @@ It's highly inspired by https://github.com/codesenberg/bombardier but it's far f
 
 `minigun [<flags>] <url>` <br>
 or  <br>
-`minigun --help`
+`minigun --help` <br>
+To see all the options and possibilities.
+You can either see report of a test or consume a output from each test in json or ron format!
 
+Example: <br>
 `$ minigun -c 10 -r 100 http://localhost:8080`
 
 
 ---
 
 ## Documentation 📚
+TBD
 
-The developer documentation can be found on Rust Docs at <https://docs.rs/minigun>
+<!-- The developer documentation can be found on Rust Docs at <https://docs.rs/minigun> -->
 
 ---
 
@@ -110,14 +119,14 @@ Please follow [our contributing guidelines](docs/CONTRIBUTING.md)
 ---
 
 ## Changelog ⏳
-
-View minigun's changelog [HERE](docs/CHANGELOG.md)
+TBD
+<!-- View minigun's changelog [HERE](docs/CHANGELOG.md) -->
 
 ---
 
 ## License 📃
 
-tui-realm-stdlib is licensed under the MIT license.
+Minigun is licensed under the MIT license.
 
 You can read the entire license [HERE](docs/LICENSE)
 
