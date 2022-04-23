@@ -33,7 +33,7 @@
 <p align="center">
   <a href="https://github.com/lkadalski/minigun/actions"
     ><img
-      src="https://github.com/lkadalski/minigun/workflows/Rust/badge.svg"
+      src="https://github.com/lkadalski/minigun/workflows/build/badge.svg"
       alt="CI"
   /></a>
   <a href="https://docs.rs/minigun"
@@ -41,6 +41,9 @@
       src="https://docs.rs/minigun/badge.svg"
       alt="Docs"
   /></a>
+    <a href="#badge">
+    <img alt="semantic-release: conventional" src="https://img.shields.io/badge/semantic--release-conventional-e10079?logo=semantic-release">
+  </a>
 </p>
 
 ---
