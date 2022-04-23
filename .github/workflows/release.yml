@@ -36,11 +36,11 @@ jobs:
             rust: stable
             target: x86_64-pc-windows-msvc
             suffix: '.exe'
-          - build: macos
-            os: macos-latest
-            rust: stable
-            target: aarch64-apple-darwin
-            suffix: ''
+          # - build: macos
+          #   os: macos-latest
+          #   rust: stable
+          #   target: aarch64-apple-darwin
+          #   suffix: ''
 
     steps:
     - uses: actions/checkout@v1
