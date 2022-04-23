@@ -24,7 +24,7 @@
       src="https://img.shields.io/github/v/release/lkadalski/minigun?display_name=tag&sort=semver"
       alt="Latest version"
   /></a>
-  <a href="https://crates.io/crates/minigun"
+<!--   <a href="https://crates.io/crates/minigun"
     ><img
       src="https://img.shields.io/crates/d/minigun.svg"
       alt="Downloads counter"
@@ -34,7 +34,7 @@
       src="https://img.shields.io/crates/v/minigun.svg"
       alt="Latest version"
   /></a>
-  
+   -->
 </p>
 <p align="center">
   <a href="https://github.com/lkadalski/minigun/actions"
