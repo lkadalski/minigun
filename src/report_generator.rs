@@ -2,10 +2,9 @@ use crate::options::OutputType;
 use crate::test_dispatcher::{Error, TestResult, TestState};
 use async_std::channel::Receiver;
 use async_std::task;
+use comfy_table::Table;
 use futures::StreamExt;
 use indicatif::ProgressStyle;
-use prettytable::Table;
-use prettytable::{cell, row};
 use std::ops::{Add, Div};
 use std::time::Duration;
 
@@ -64,37 +63,36 @@ impl ReportGenerator {
         let mut status_table = Table::new();
 
         let statistics = calculate_statistics(&test_state);
-        table.add_row(row![
+        table.set_header(vec![
             "Total Time",
             "Average Request Time ",
-            "Total Requests"
+            "Total Requests",
         ]);
-        table.add_row(row![
+        table.add_row(vec![
             format!("{:?}", test_state.calculate_duration()),
             format!("{:?}", statistics.avg_time),
-            format!("{}", test_state.test_results.len())
+            format!("{}", test_state.test_results.len()),
         ]);
-        status_table.add_row(row![
+        status_table.add_row(vec![
             "HTTP codes",
             "1xx",
             "2xx",
             "3xx",
             "4xx",
             "5xx",
-            "Others"
+            "Others",
         ]);
-        status_table.add_row(row![
-            "Count",
-            statistics.test_statuses.val_100,
-            statistics.test_statuses.val_200,
-            statistics.test_statuses.val_300,
-            statistics.test_statuses.val_400,
-            statistics.test_statuses.val_500,
-            statistics.test_statuses.err_val
+        status_table.add_row(vec![
+            "Count".to_string(),
+            format!("{}", statistics.test_statuses.val_100),
+            format!("{}", statistics.test_statuses.val_200),
+            format!("{}", statistics.test_statuses.val_300),
+            format!("{}", statistics.test_statuses.val_400),
+            format!("{}", statistics.test_statuses.val_500),
+            format!("{}", statistics.test_statuses.err_val),
         ]);
-
-        table.printstd();
-        status_table.printstd();
+        println!("{table}");
+        println!("{status_table}");
         Ok(())
     }
 }
