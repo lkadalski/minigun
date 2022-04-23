@@ -19,6 +19,11 @@
       src="https://img.shields.io/github/stars/lkadalski/minigun.svg"
       alt="Repo stars"
   /></a>
+    <a href="https://github.com/lkadalski/minigun/releases"
+    ><img
+      src="https://img.shields.io/github/v/release/lkadalski/minigun?display_name=tag&sort=semver"
+      alt="Latest version"
+  /></a>
   <a href="https://crates.io/crates/minigun"
     ><img
       src="https://img.shields.io/crates/d/minigun.svg"
@@ -29,17 +34,13 @@
       src="https://img.shields.io/crates/v/minigun.svg"
       alt="Latest version"
   /></a>
+  
 </p>
 <p align="center">
   <a href="https://github.com/lkadalski/minigun/actions"
     ><img
       src="https://github.com/lkadalski/minigun/workflows/build/badge.svg"
       alt="CI"
-  /></a>
-  <a href="https://docs.rs/minigun"
-    ><img
-      src="https://docs.rs/minigun/badge.svg"
-      alt="Docs"
   /></a>
     <a href="#badge">
     <img alt="semantic-release: conventional" src="https://img.shields.io/badge/semantic--release-conventional-e10079?logo=semantic-release">
