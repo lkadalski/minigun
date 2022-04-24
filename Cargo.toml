@@ -7,7 +7,7 @@ license = "MIT"
 description = "Multipurpose CLI HTTP load testing tool"
 repository = "https://github.com/lkadalski/minigun"
 homepage = "https://github.com/lkadalski/minigun"
-keywords = ["terminal","cli","http","load testing"]
+keywords = ["terminal","cli","http","load-testing"]
 categories = ["command-line-interface","command-line-utilities", "http", "load-testing"]
 readme = "README.md"
 
