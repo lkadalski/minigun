@@ -4,10 +4,14 @@ env:
   
 on:
   pull_request:
-    paths: '**/Cargo.lock'
+    paths: 
+      - '**/Cargo.lock'
+      - '**/Cargo.toml'
   push:
     branches: master
-    paths: '**/Cargo.lock'
+    paths: 
+     - '**/Cargo.lock'
+     - '**/Cargo.toml'
   schedule:
     - cron: "0 0 * * *"
 jobs:
@@ -17,4 +21,4 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions-rs/audit-check@v1
         with:
-          token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
