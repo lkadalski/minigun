@@ -111,10 +111,10 @@ TBD
 
 ## Contributing and issues 🤝
 
-Contributions, bug reports, new features and questions are welcome! 😉
-If you have any question or concern, or you want to suggest a new feature, or you want just want to improve minigun, feel 
+Contributions, bug reports, new features and questions are welcome! 😉 <br>
+If you have any question or concern, or you want to suggest a new feature, or you want just want to improve minigun, feel free to create ticket!
 
-Please follow [our contributing guidelines](docs/CONTRIBUTING.md)
+How to improve this repo ? Please follow [our contributing guidelines](docs/CONTRIBUTING.md)
 
 ---
 
