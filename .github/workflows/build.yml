@@ -37,11 +37,10 @@ jobs:
           toolchain: stable
           override: true
           components: clippy
-      - name: Check Lints
-        uses: actions-rs/cargo@v1
+      - uses: actions-rs/clippy-check@v1
         with:
-          command: clippy
-          args: -- -D clippy::pedantic -A clippy::must_use_candidate -A clippy::cast_precision_loss -A clippy::cast_possible_truncation -A clippy::cast_possible_wrap -A clippy::cast_sign_loss -A clippy::mut_mut
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --all-features -- -D clippy::pedantic -A clippy::must_use_candidate -A clippy::cast_precision_loss -A clippy::cast_possible_truncation -A clippy::cast_possible_wrap -A clippy::cast_sign_loss -A clippy::mut_mut
   test:
     name: Test
     runs-on: ubuntu-latest
