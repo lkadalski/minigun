@@ -58,7 +58,7 @@
       - [Usage](#usage)
   - [Documentation 📚](#documentation-)
   - [Contributing and issues 🤝](#contributing-and-issues-)
-  - [Changelog ⏳](#changelog-)
+<!--   - [Changelog ⏳](#changelog-) -->
   - [License 📃](#license-)
 
 
@@ -99,12 +99,10 @@ You can either see report of a test or consume a output from each test in json o
 
 Example: <br>
 `$ minigun -c 10 -r 100 http://localhost:8080 -o json` <br>
-which you could translate to: <br>
-`Use 10 connection with maximum test cases set to 100 targeting http://localhost:8080 and give me output in json`
-Default is `GET` HTTP method, which you can change with `-m` param.
 
-Other possibilites:
-`CLI Multipurpose HTTP benchmarking tool written in Rust
+Other possibilites: <br>
+```
+CLI Multipurpose HTTP benchmarking tool written in Rust
 
 USAGE:
     minigun [FLAGS] [OPTIONS] <url>
@@ -124,7 +122,8 @@ OPTIONS:
     -r, --request-count <request-count>          Total amount of request which should be executed [default: 10]
 
 ARGS:
-    <url>    Target URL which should Minigun aim for`
+    <url>    Target URL which should Minigun aim for
+```
     
 
 ---
@@ -145,12 +144,10 @@ If you have any question or concern, or you want to suggest a new feature, or yo
 How to improve this repo ? Please follow [our contributing guidelines](docs/CONTRIBUTING.md)
 
 ---
-
+<!-- 
 ## Changelog ⏳
 TBD
 <!-- View minigun's changelog [HERE](docs/CHANGELOG.md) -->
-
----
 
 ## License 📃
 
