@@ -7,7 +7,6 @@ on:
   
 name: Create Release
 
-
 jobs:
   build:
     name: Build release
@@ -61,10 +60,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v1
-    - name: Install NPM
-      uses: bahmutov/npm-install@v1.6.0
-    - name: Install NPM package
-      run: npm install conventional-changelog-conventionalcommits -D
     - name: Fetch Artifacts
       uses: actions/download-artifact@v3
       with:

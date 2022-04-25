@@ -5,7 +5,7 @@ branches:
   - name: alpha
     prerelease: true
 
-preset: "conventionalcommits"
+preset: "angular"
 tagFormat: "v${version}"
 plugins:
   - "@semantic-release/commit-analyzer"
