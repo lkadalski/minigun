@@ -95,6 +95,7 @@ mod test {
     use crate::options::TargetParameters;
     use crate::test_dispatcher::TestSuiteRequest;
     use crate::test_runner::TestRunner;
+    use async_std::prelude::StreamExt;
     use async_std::sync::Arc;
     use http_client::http_types::StatusCode;
     use mockito::mock;
@@ -105,6 +106,7 @@ mod test {
         let mock = mock("GET", "/hello")
             .with_status(200)
             .with_body("OK")
+            .expect(10)
             .create();
         let job_sender = async_std::channel::unbounded();
         let target = Arc::new(TargetParameters {
@@ -126,11 +128,10 @@ mod test {
             .send(test_request)
             .await
             .expect("Could not send a message");
-        let output = TestRunner::run(job_sender.1).await;
-        if let Ok(receiver) = output {
-            if let Ok(result) = receiver.recv().await {
-                assert_eq!(result.status.unwrap(), StatusCode::Ok);
-            }
+        let mut receiver = TestRunner::run(job_sender.1.clone()).await.unwrap();
+        drop(job_sender);
+        while let Some(result) = receiver.next().await {
+            assert_eq!(result.status.unwrap(), StatusCode::Ok);
         }
         mock.assert();
         Ok(())
