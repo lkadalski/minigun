@@ -77,11 +77,11 @@ Please test it yourself!
 
 ## Installation
 There are few methods to obtain binary:
-
+<!-- 
 ### cargo
 TBD
 ### docker
-TBD
+TBD -->
 ### binary
 See [releases](https://github.com/lkadalski/minigun/releases)
 
