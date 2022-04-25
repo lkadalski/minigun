@@ -7,16 +7,6 @@ on:
   
 name: Create Release
 
-env:
-  # Could, potentially automatically parse
-  # the bin name, but let's do it automatically for now.
-  RELEASE_BIN: minigun 
-
-  # Space separated paths to include in the archive.
-  # Start relative paths with a dot if you don't want
-  # paths to be preserved. Use "/" as a delimiter.
-  RELEASE_ADDS: README.md LICENSE
-
 
 jobs:
   build:
@@ -36,11 +26,11 @@ jobs:
             rust: stable
             target: x86_64-pc-windows-msvc
             suffix: '.exe'
-          # - build: macos
-          #   os: macos-latest
-          #   rust: stable
-          #   target: aarch64-apple-darwin
-          #   suffix: ''
+          - build: macos
+            os: macos-latest
+            rust: stable
+            target: aarch64-apple-darwin
+            suffix: ''
 
     steps:
     - uses: actions/checkout@v1
@@ -52,15 +42,17 @@ jobs:
     - uses: actions-rs/cargo@v1
       with:
         command: build
-        args: --release  --target=${{ matrix.target }}
+        args: --release --locked --target=${{ matrix.target }}
       env:
         CARGO_PROFILE_RELEASE_LTO: true
         CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
+    - name: Rename
+      run: mv target/${{ matrix.target }}/release/minigun${{ matrix.suffix }} target/${{ matrix.target }}/release/minigun_${{ matrix.target }}${{ matrix.suffix }}
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
         name: minigun_${{ matrix.target }}${{ matrix.suffix }}
-        path: target/${{ matrix.target }}/release/minigun${{ matrix.suffix }}
+        path: target/${{ matrix.target }}/release/minigun_${{ matrix.target }}${{ matrix.suffix }}
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
   publish:
