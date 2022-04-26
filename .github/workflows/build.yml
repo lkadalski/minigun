@@ -7,10 +7,12 @@ on:
       - master
       - beta
   pull_request:
-    branches: master
+    branches:
+      - master
 
 env:
   CARGO_TERM_COLOR: always
+  BACKTRACE: true
 
 jobs:
   fmt:
@@ -87,3 +89,94 @@ jobs:
         with:
           name: code-coverage-report
           path: cobertura.xml
+
+#  dry_release:
+#    name: Get semantic release version
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: cycjimmy/semantic-release-action@v2
+#        id: semantic_dry
+#        with:
+#          dry_run: true
+#          extra_plugins: |
+#            conventional-changelog-conventionalcommits@4.6.1
+#      outputs:
+#        new_release_published: ${{ steps.semantic_dry.outputs.new_release_published }}
+#        new_release_version: ${{ steps.semantic_dry.outputs.new_release_version }}
+
+  build:
+    name: Build release
+    needs: [test, fmt, clippy, coverage]
+    continue-on-error: false
+    if: ${{ needs.*.result == 'success' }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - build: linux
+            os: ubuntu-latest
+            rust: stable
+            target: x86_64-unknown-linux-gnu
+            suffix: ''
+          - build: windows
+            os: windows-latest
+            rust: stable
+            target: x86_64-pc-windows-msvc
+            suffix: '.exe'
+          - build: macos
+            os: macos-latest
+            rust: stable
+            target: aarch64-apple-darwin
+            suffix: ''
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+          default: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --locked --target=${{ matrix.target }}
+        env:
+          CARGO_PROFILE_RELEASE_LTO: true
+          CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
+      - name: Rename
+        run: mv target/${{ matrix.target }}/release/minigun${{ matrix.suffix }} target/${{ matrix.target }}/release/minigun_${{ matrix.target }}${{ matrix.suffix }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: minigun_${{ matrix.target }}${{ matrix.suffix }}
+          path: target/${{ matrix.target }}/release/minigun_${{ matrix.target }}${{ matrix.suffix }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Fetch Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: publish/
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          branches: |
+            [
+              'master', 
+              {
+                name: 'beta', 
+                prerelease: true
+              }
+            ]
+          extra_plugins: |
+            @semantic-release/git
+            @semantic-release/changelog
+            conventional-changelog-conventionalcommits@4.6.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
