@@ -107,6 +107,11 @@ jobs:
   build:
     name: Build release
     needs: [test, fmt, clippy, coverage]
+    if:
+      contains('
+        refs/heads/beta
+        refs/heads/master
+      ', github.ref)
     continue-on-error: false
     runs-on: ${{ matrix.os }}
     strategy:
