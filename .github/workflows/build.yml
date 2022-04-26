@@ -90,25 +90,11 @@ jobs:
           name: code-coverage-report
           path: cobertura.xml
 
-#  dry_release:
-#    name: Get semantic release version
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: cycjimmy/semantic-release-action@v2
-#        id: semantic_dry
-#        with:
-#          dry_run: true
-#          extra_plugins: |
-#            conventional-changelog-conventionalcommits@4.6.1
-#      outputs:
-#        new_release_published: ${{ steps.semantic_dry.outputs.new_release_published }}
-#        new_release_version: ${{ steps.semantic_dry.outputs.new_release_version }}
-
   build:
     name: Build release
-    needs: [test, fmt, clippy, coverage]
+    needs: [test, fmt, clippy]
     continue-on-error: false
-    if: ${{ needs.*.result == 'success' }}
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
