@@ -1,4 +1,4 @@
-name: build
+name: Continous Integration
 
 on:
   workflow_call:
