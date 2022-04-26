@@ -1,4 +1,5 @@
-# style="angular"
+style="conventional"
 ignore_author_re="dependabot"
 merge_commit = false
 allowed_types=["fix","feat", "chore" , "docs" , "style", "refactor", "perf", "test", "breaking"]
+subject_capitalized=false

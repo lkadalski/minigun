@@ -5,7 +5,16 @@ branches:
   - name: alpha
     prerelease: true
 
-preset: "angular"
+preset: "conventionalchangelog"
+presetConfig: 
+  '{
+      "options": {
+          "preset": {
+              "name": "conventionalchangelog",
+        }
+      }
+  
+    }'
 tagFormat: "v${version}"
 plugins:
   - "@semantic-release/commit-analyzer"

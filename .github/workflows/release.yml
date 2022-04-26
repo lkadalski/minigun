@@ -1,7 +1,7 @@
 on:
   workflow_run: 
     workflows: ["build"]
-    branches: [master]
+    branches: [master, beta]
     types:
       - completed
   
@@ -69,7 +69,6 @@ jobs:
       with:
         extra_plugins: |
           @semantic-release/git
-          @semantic-release/exec
           @semantic-release/changelog
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}   
