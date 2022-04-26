@@ -1,11 +1,10 @@
 branches:
+  - '+([0-9])?(.{+([0-9]),x}).x'
   - master
   - name: beta
     prerelease: true
-  - name: alpha
-    prerelease: true
 
-preset: "angular"
+preset: "conventionalcommits"
 tagFormat: "v${version}"
 plugins:
   - "@semantic-release/commit-analyzer"
