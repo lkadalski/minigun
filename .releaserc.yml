@@ -5,16 +5,7 @@ branches:
   - name: alpha
     prerelease: true
 
-preset: "conventionalchangelog"
-presetConfig: 
-  '{
-      "options": {
-          "preset": {
-              "name": "conventionalchangelog",
-        }
-      }
-  
-    }'
+preset: "angular"
 tagFormat: "v${version}"
 plugins:
   - "@semantic-release/commit-analyzer"
@@ -29,6 +20,8 @@ verifyConditions:
 analyzeCommits:
   - path: "@semantic-release/commit-analyzer"
     releaseRules:
+    - type: "breaking"
+      release: "major"
     - type: "feat"
       release: "minor"
     - type: "fix"
@@ -41,8 +34,6 @@ analyzeCommits:
       release: "patch"
     - type: "style"
       release: "patch"
-    - type: "breaking"
-      release: "major"
 generateNotes:
   - path: "@semantic-release/release-notes-generator"
     writerOpts:
@@ -51,6 +42,7 @@ generateNotes:
         - "feat"
         - "perf"
         - "fix"
+        - "breaking"
       commitsSort: "header"
     types:
     - type: "breaking"
@@ -62,6 +54,8 @@ generateNotes:
     - section: "Bug Fixes"
     # Uninmportent fix (CI testing, etc)
     - type: "chore"
+    - hidden: true
+    - type: "build"
     - hidden: true
     - type: "docs"
     - hidden: true
@@ -79,7 +73,7 @@ prepare:
     assets: 
       - 'Cargo.toml'
       - 'docs/CHANGELOG.md'
-    message: "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+    message: "build(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
   - path: "@semantic-release/changelog"
     changelogFile: "docs/CHANGELOG.md"
 publish:
