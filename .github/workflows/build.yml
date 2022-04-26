@@ -1,4 +1,4 @@
-name: build
+name: Continous Integration
 
 on:
   workflow_call:
@@ -108,7 +108,6 @@ jobs:
     name: Build release
     needs: [test, fmt, clippy, coverage]
     continue-on-error: false
-    if: ${{ needs.*.result == 'success' }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
