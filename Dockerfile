@@ -22,4 +22,5 @@ RUN apk --no-cache add ca-certificates
 COPY --from=builder \
     /home/rust/src/target/x86_64-unknown-linux-musl/release/minigun \
     /usr/local/bin/
-CMD /usr/local/bin/minigun
+ENTRYPOINT ["/usr/local/bin/minigun"]
+CMD ["--help"]
