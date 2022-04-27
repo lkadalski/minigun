@@ -50,7 +50,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -78,23 +78,42 @@ jobs:
         with:
           version: '0.15.0'
           args: '-- --test-threads 1'
-
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v1.0.2
         with:
           token: ${{secrets.CODECOV_TOKEN}}
-
       - name: Archive code coverage results
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: code-coverage-report
           path: cobertura.xml
+          
+  verify_publish_need:
+    needs: [test, fmt, clippy]
+    name: Verify if new release is needed
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    outputs: 
+      should_publish: ${{ steps.dry_run.outputs.new_release_published }} 
+    steps:
+      - uses: actions/checkout@v3
+      - name: Semantic Release Dry Run 
+        id: dry_run
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          dry_run: true
+          extra_plugins: |
+            @semantic-release/git
+            @semantic-release/changelog
+            conventional-changelog-conventionalcommits@4.6.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
   build:
     name: Build release
-    needs: [test, fmt, clippy]
+    needs: [verify_publish_need]
     continue-on-error: false
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta'
+    if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta') &&  ${{ needs.verify_publish_need.outputs.should_publish }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -140,7 +159,8 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
-    needs: [ build ]
+    needs: [ build, verify_publish_need ]
+    if:  ${{ needs.verify_publish_need.outputs.should_publish }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -152,14 +172,6 @@ jobs:
         id: semantic_release
         uses: cycjimmy/semantic-release-action@v2
         with:
-          branches: |
-            [
-              'master', 
-              {
-                name: 'beta', 
-                prerelease: true
-              }
-            ]
           extra_plugins: |
             @semantic-release/git
             @semantic-release/changelog
