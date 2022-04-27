@@ -3,7 +3,7 @@ branches:
   - master
   - name: beta
     prerelease: true
-repositoryUrl: "https://www.github.com/lkadalski/minigun.git
+repositoryUrl: "https://www.github.com/lkadalski/minigun.git"
 preset: "conventionalcommits"
 tagFormat: "v${version}"
 plugins:
