@@ -24,6 +24,21 @@
       src="https://img.shields.io/github/v/release/lkadalski/minigun?display_name=tag&sort=semver"
       alt="Latest version"
   /></a>
+      <a href="https://github.com/lkadalski/minigun/actions/workflows/build.yml"
+    ><img
+      src="https://github.com/lkadalski/minigun/actions/workflows/build.yml/badge.svg"
+      alt="Continous Integration"
+  /></a>
+      <a href="https://github.com/lkadalski/minigun/releases"
+    ><img
+      src="https://img.shields.io/badge/semantic--release-conventional-e10079?logo=semantic-release"
+      alt="Semantic Release: conventional"
+  /></a>
+   <a href="https://hub.docker.com/r/lkadalski/minigun/tags"
+    ><img
+      src="https://img.shields.io/docker/v/lkadalski/minigun?label=docker&sort=semver"
+      alt="Docker Image Version"
+  /></a>
 <!--   <a href="https://crates.io/crates/minigun"
     ><img
       src="https://img.shields.io/crates/d/minigun.svg"
@@ -35,24 +50,12 @@
       alt="Latest version"
   /></a>
    -->
-</p>
-<p align="center">
-  <a href="https://github.com/lkadalski/minigun/actions"
-    ><img
-      src="https://github.com/lkadalski/minigun/workflows/build/badge.svg"
-      alt="CI"
-  /></a>
-    <a href="#badge">
-    <img alt="semantic-release: conventional" src="https://img.shields.io/badge/semantic--release-conventional-e10079?logo=semantic-release">
-  </a>
-</p>
 
 ---
 
 - [About minigun 👑](#about-minigun-)
   - [Get started 🏁](#get-started-)
       - [Installation](#installation)
-        - [cargo](#cargo)
         - [docker](#docker)
         - [binary](#binary)
       - [Usage](#usage)
@@ -79,9 +82,9 @@ Please test it yourself!
 There are few methods to obtain binary:
 <!-- 
 ### cargo
-TBD
-### docker
 TBD -->
+### docker
+Images are available [here](https://hub.docker.com/r/lkadalski/minigun/tags)
 ### binary
 See [releases](https://github.com/lkadalski/minigun/releases)
 
