@@ -3,6 +3,10 @@ branches:
   - master
   - name: beta
     prerelease: true
+ci: true
+debug: true
+dryRun: false
+# Global plugin options (will be passed to all plugins)
 preset: "conventionalcommits"
 tagFormat: "v${version}"
 plugins:
@@ -12,10 +16,23 @@ plugins:
   - "@semantic-release/git"
   - "@semantic-release/github"
 
+# Responsible for verifying conditions necessary to proceed with the release:
+# configuration is correct, authentication tokens are valid, etc...
 verifyConditions:
+  # Verify the presence and the validity of the Git authentication
+  # and release configuration
   - '@semantic-release/git'
+  # Verify the presence and the validity of the GitLab authentication
+  # and release configuration
   - "@semantic-release/github"
+  # Verify the presence and the validity of the configuration
   - "@semantic-release/changelog"
+  
+  
+# Responsible for determining the type of the next release (major, minor or patch).
+# If multiple plugins with a analyzeCommits step are defined, the release type will be
+# the highest one among plugins output.
+# Look details at: https://github.com/semantic-release/commit-analyzer#configuration  
 analyzeCommits:
   - path: "@semantic-release/commit-analyzer"
     releaseRules:
@@ -45,9 +62,16 @@ analyzeCommits:
         release: false
       - type: test      # Adding missing tests or correcting existing tests
         release: false
+        
+# Responsible for generating the content of the release notes.
+# If multiple plugins with a generateNotes step are defined,
+# the release notes will be the result of the concatenation of each plugin output.
 generateNotes:
   - path: "@semantic-release/release-notes-generator"
-    preset: "conventionalcommits"
+    # detect GitHub issues in merge commits
+    parserOpts:
+      issuePrefixes: ['#']
+      noteKeywords: ['BREAKING CHANGE', 'BREAKING CHANGES']
     writerOpts:
       groupBy: 'type'
       commitGroupsSort: 'title'
@@ -89,14 +113,23 @@ generateNotes:
         - type: 'test'
           section: '🧪 Tests'
           hidden: true
+          
+# Responsible for preparing the release, for example creating or updating files
+# such as package.json, CHANGELOG.md, documentation or compiled assets
+# and pushing a commit.
 prepare:
+    # Create or update the changelog file in the local project repository
+  - path: "@semantic-release/changelog"
+    changelogFile: "docs/CHANGELOG.md"
+    
+    # Push a release commit and tag, including configurable files
   - path: "@semantic-release/git"
     assets: 
       - 'Cargo.toml'
       - 'docs/CHANGELOG.md'
     message: "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-  - path: "@semantic-release/changelog"
-    changelogFile: "docs/CHANGELOG.md"
+    
+# Responsible for publishing the release.
 publish:
   - path: "@semantic-release/github"
     assets: 'publish/**'
