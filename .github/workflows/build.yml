@@ -170,16 +170,15 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           path: publish/
-      - name: Semantic Release
-        id: semantic_release
+      - name: Semantic Release Dry Run 
         uses: cycjimmy/semantic-release-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
         with:
           extra_plugins: |
             @semantic-release/git
             @semantic-release/changelog
-            conventional-changelog-conventionalcommits@4.6.1
+            conventional-changelog-conventionalcommits
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
       - name: Login to DockerHub
         uses: docker/login-action@v1 
         with:
