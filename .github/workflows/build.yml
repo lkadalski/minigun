@@ -178,7 +178,7 @@ jobs:
             @semantic-release/changelog
             conventional-changelog-conventionalcommits
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GH_TOKEN: ${{ secrets.TOKEN }}
       - name: Login to DockerHub
         uses: docker/login-action@v1 
         with:
