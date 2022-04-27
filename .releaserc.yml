@@ -4,6 +4,7 @@ branches:
   - name: beta
     prerelease: true
 ci: true
+repositoryUrl: "https://github.com/lkadalski/minigun.git"
 debug: true
 dryRun: false
 # Global plugin options (will be passed to all plugins)
