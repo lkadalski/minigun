@@ -121,7 +121,7 @@ jobs:
     name: Build release
     needs: [verify_publish_need]
     continue-on-error: false
-    if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta') &&  ${{ needs.verify_publish_need.outputs.should_publish }} == 'true'
+    if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta') &&  ${{ needs.verify_publish_need.outputs.should_publish == 'true' }} 
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -168,7 +168,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     needs: [ build, verify_publish_need ]
-    if:  ${{ needs.verify_publish_need.outputs.should_publish }} == 'true'
+    if:  ${{ needs.verify_publish_need.outputs.should_publish == 'true' }} 
     steps:
       - name: Do something when a new release published
         run: |
