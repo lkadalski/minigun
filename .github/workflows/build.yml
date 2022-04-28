@@ -170,6 +170,9 @@ jobs:
     needs: [ build, verify_publish_need ]
     if:  ${{ needs.verify_publish_need.outputs.should_publish }} == 'true'
     steps:
+      - name: Do something when a new release published
+        run: |
+          echo ${{ needs.verify_publish_need.outputs.should_publish }}
       - name: Checkout
         uses: actions/checkout@v3
         with: 
