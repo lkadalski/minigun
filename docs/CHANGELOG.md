@@ -1,3 +1,12 @@
+### [1.7.4](https://github.com/lkadalski/minigun/compare/v1.7.3...v1.7.4) (2022-04-28)
+
+
+### 🛠 Fixes
+
+* amend build.yml ([1315abf](https://github.com/lkadalski/minigun/commit/1315abfc0fc8ec7078b6e2ec751464ea4d19c307))
+* dockerfile entrypoint change ([f01059f](https://github.com/lkadalski/minigun/commit/f01059f71677b0c3693c3e42dfaa598ac71bc620))
+* removing redundant file ([1832f09](https://github.com/lkadalski/minigun/commit/1832f0940905b2a7d2ef067cf2b7245ac368c504))
+
 ### [1.7.3](https://github.com/lkadalski/minigun/compare/v1.7.2...v1.7.3) (2022-04-27)
 
 
