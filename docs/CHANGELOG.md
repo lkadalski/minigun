@@ -1,3 +1,11 @@
+### [1.7.6](https://github.com/lkadalski/minigun/compare/v1.7.5...v1.7.6) (2022-04-28)
+
+
+### 📔 Docs
+
+* update readme ([41e3ab8](https://github.com/lkadalski/minigun/commit/41e3ab81369acc126f197afca46ffc7df87afba0))
+* Update README.md ([af7e61b](https://github.com/lkadalski/minigun/commit/af7e61bda55f1cf45fe3c79463343ab2648c66f2))
+
 ### [1.7.5](https://github.com/lkadalski/minigun/compare/v1.7.4...v1.7.5) (2022-04-28)
 
 
