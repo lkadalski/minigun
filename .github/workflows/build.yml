@@ -105,7 +105,7 @@ jobs:
           extra_plugins: |
             @semantic-release/git
             @semantic-release/changelog
-            conventional-changelog-conventionalcommits@4.6.1
+            conventional-changelog-conventionalcommits
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -113,7 +113,7 @@ jobs:
     name: Build release
     needs: [verify_publish_need]
     continue-on-error: false
-    if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta') &&  ${{ needs.verify_publish_need.outputs.should_publish }}
+    if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta') &&  ${{ needs.verify_publish_need.outputs.should_publish }} == 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -160,7 +160,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     needs: [ build, verify_publish_need ]
-    if:  ${{ needs.verify_publish_need.outputs.should_publish }}
+    if:  ${{ needs.verify_publish_need.outputs.should_publish }} == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
