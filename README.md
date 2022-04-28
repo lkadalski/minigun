@@ -21,7 +21,7 @@
   /></a>
     <a href="https://github.com/lkadalski/minigun/releases"
     ><img
-      src="https://img.shields.io/github/v/release/lkadalski/minigun?display_name=tag&sort=semver"
+      src="https://img.shields.io/github/v/release/lkadalski/minigun?sort=semver"
       alt="Latest version"
   /></a>
       <a href="https://github.com/lkadalski/minigun/actions/workflows/build.yml"
