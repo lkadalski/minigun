@@ -47,7 +47,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-features -- -D clippy::pedantic -A clippy::must_use_candidate -A clippy::cast_precision_loss -A clippy::cast_possible_truncation -A clippy::cast_possible_wrap -A clippy::cast_sign_loss -A clippy::mut_mut
   test:
-    name: Test
+    name: Cargo Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -62,7 +62,7 @@ jobs:
           command: test
 
   coverage:
-    name: Code coverage
+    name: Code Coverage
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -110,7 +110,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build:
-    name: Build release
+    name: Build Release
     needs: [verify_publish_need]
     continue-on-error: false
     if: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta') &&  needs.verify_publish_need.outputs.should_publish == 'true' }}
@@ -158,6 +158,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
   publish:
+    name: Publish Release
     runs-on: ubuntu-latest
     needs: [ build, verify_publish_need ]
     if:  ${{ needs.verify_publish_need.outputs.should_publish == 'true' }} 
@@ -185,7 +186,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_LOGIN }}
           password: ${{ secrets.DOCKER_TOKEN }}
-      - name: Build and push
+      - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           push: true
