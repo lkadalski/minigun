@@ -34,11 +34,6 @@
       src="https://img.shields.io/badge/semantic--release-conventional-e10079?logo=semantic-release"
       alt="Semantic Release: conventional"
   /></a>
-   <a href="https://hub.docker.com/r/lkadalski/minigun/tags"
-    ><img
-      src="https://img.shields.io/docker/v/lkadalski/minigun?label=docker&sort=semver"
-      alt="Docker Image Version"
-  /></a>
 <!--   <a href="https://crates.io/crates/minigun"
     ><img
       src="https://img.shields.io/crates/d/minigun.svg"
