@@ -1,3 +1,10 @@
+### [1.7.5](https://github.com/lkadalski/minigun/compare/v1.7.4...v1.7.5) (2022-04-28)
+
+
+### 🛠 Fixes
+
+* fixing docker image tagging ([1562a32](https://github.com/lkadalski/minigun/commit/1562a32d308b562b259f546de2bfdad127597f4f))
+
 ### [1.7.4](https://github.com/lkadalski/minigun/compare/v1.7.3...v1.7.4) (2022-04-28)
 
 
