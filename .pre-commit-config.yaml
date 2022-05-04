@@ -1,4 +1,15 @@
 default_stages: [commit, push]
+ci:
+    autofix_commit_msg: |
+        chore(commit): [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+        for more information, see https://pre-commit.ci
+    autofix_prs: true
+    autoupdate_branch: ''
+    autoupdate_commit_msg: 'chore(commit): [pre-commit.ci] pre-commit autoupdate'
+    autoupdate_schedule: weekly
+    skip: []
+    submodules: false
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.2.0
