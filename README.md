@@ -1,10 +1,8 @@
 # <p align="center"> MINIGUN  🦀 </p>
 
-[//]: # (<p align="center">)
-
-[//]: # (  <img src="/docs/images/image.svg" width="256" height="256" />)
-
-[//]: # (</p>)
+<p align="center">
+  <img src="/docs/images/minigun.svg" width="256" height="256" />
+</p>
 
 <p align="center">Developed by <a href="https://lkadalski.github.io/" target="_blank">@lkadalski</a></p>
 
@@ -75,7 +73,7 @@ Please test it yourself!
 
 ## Installation
 There are few methods to obtain binary:
-<!-- 
+<!--
 ### cargo
 TBD -->
 ### docker
@@ -122,7 +120,7 @@ OPTIONS:
 ARGS:
     <url>    Target URL which should Minigun aim for
 ```
-    
+
 
 ---
 
@@ -142,7 +140,7 @@ If you have any question or concern, or you want to suggest a new feature, or yo
 How to improve this repo ? Please follow [our contributing guidelines](docs/CONTRIBUTING.md)
 
 ---
-<!-- 
+<!--
 ## Changelog ⏳
 TBD
 <!-- View minigun's changelog [HERE](docs/CHANGELOG.md) -->
@@ -152,6 +150,3 @@ TBD
 Minigun is licensed under the MIT license.
 
 You can read the entire license [HERE](docs/LICENSE)
-
-
-

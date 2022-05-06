@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;" xml:space="preserve">
+<style type="text/css">
+	.st0{display:none;}
+</style>
+<g id="Warstwa_1" class="st0">
+	
+		<image style="display:inline;overflow:visible;" width="100" height="100" xlink:href="../Downloads/icons8-gatling-gun-100.png"  transform="matrix(0.7071 -0.7071 0.7071 0.7071 -1.2921 79.3256)">
+	</image>
+</g>
+<g id="Warstwa_2">
+	<g>
+		<rect x="101.4" y="278.1" transform="matrix(4.490103e-11 -1 1 4.490103e-11 -181.9666 403.2551)" width="18.6" height="29"/>
+		<rect x="101.4" y="245.1" transform="matrix(4.485218e-11 -1 1 4.485218e-11 -148.917 370.2055)" width="18.6" height="29"/>
+		<rect x="101.4" y="212.9" transform="matrix(4.490103e-11 -1 1 4.490103e-11 -116.7371 338.0256)" width="18.6" height="29"/>
+		<rect x="101.4" y="179.8" transform="matrix(4.490103e-11 -1 1 4.490103e-11 -83.6874 304.9759)" width="18.6" height="29"/>
+	</g>
+	<g>
+		<rect x="35.7" y="278.1" transform="matrix(4.490103e-11 -1 1 4.490103e-11 -247.631 337.5907)" width="18.6" height="29"/>
+		<rect x="35.7" y="245.1" transform="matrix(4.485218e-11 -1 1 4.485218e-11 -214.5814 304.5411)" width="18.6" height="29"/>
+		<rect x="35.7" y="212.9" transform="matrix(4.490103e-11 -1 1 4.490103e-11 -182.4015 272.3611)" width="18.6" height="29"/>
+		<rect x="35.7" y="179.8" transform="matrix(4.490103e-11 -1 1 4.490103e-11 -149.3518 239.3115)" width="18.6" height="29"/>
+	</g>
+	<rect x="49.8" y="231.3" transform="matrix(4.489748e-11 -1 1 4.489748e-11 -120.6508 366.2917)" width="146.1" height="24.4"/>
+	<rect x="-7.6" y="231.3" transform="matrix(4.489748e-11 -1 1 4.489748e-11 -178.0528 308.8897)" width="146.1" height="24.4"/>
+	<rect x="184.9" y="251" transform="matrix(4.490103e-11 -1 1 4.490103e-11 -98.6177 486.8939)" width="18.6" height="83.5"/>
+	<rect x="184.9" y="218" transform="matrix(4.490103e-11 -1 1 4.490103e-11 -65.5681 453.8442)" width="18.6" height="83.5"/>
+	<rect x="184.9" y="185.8" transform="matrix(4.490103e-11 -1 1 4.490103e-11 -33.3882 421.6643)" width="18.6" height="83.5"/>
+	<rect x="184.9" y="152.7" transform="matrix(4.490103e-11 -1 1 4.490103e-11 -0.3386 388.6147)" width="18.6" height="83.5"/>
+	<path d="M342,180.3v117.1c0,18.9-15.3,34.2-34.2,34.2H284c-18.9,0-34.2-15.3-34.2-34.2V180.3c0-18.9,15.3-34.2,34.2-34.2h23.8
+		C326.7,146.1,342,161.4,342,180.3z"/>
+	<path d="M313.3,351.3h-34.9c-4.5,0-8.9-0.7-13-1.9v37.8c0,11.6,9.4,21,21,21h18.7c11.6,0,21-9.4,21-21v-37.8
+		C322.2,350.6,317.8,351.3,313.3,351.3z"/>
+	<path d="M372.1,331.2l-8.8,46c0,10,8.1,18,18,18h15.6c10,0,18-8.1,18-18l8.8-46H372.1z"/>
+	<path d="M357.2,165.9v141.6c0,2.8-0.3,5.5-0.8,8.2h71.5c23,0,41.6-18.6,41.6-41.6v-74.5c0-23-18.6-41.6-41.6-41.6h-71.5
+		C356.9,160.5,357.2,163.2,357.2,165.9z"/>
+</g>
+</svg>
