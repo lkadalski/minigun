@@ -53,7 +53,7 @@
       - [Usage](#usage)
   - [Documentation 📚](#documentation-)
   - [Contributing and issues 🤝](#contributing-and-issues-)
-<!--   - [Changelog ⏳](#changelog-) -->
+  - [Changelog ⏳](#changelog-)
   - [License 📃](#license-)
 
 
@@ -63,7 +63,7 @@
 
 Minigun is a experimental HTTP(S) benchmarking tool. It is written in Rust programming language.
 It's highly inspired by https://github.com/codesenberg/bombardier but it's far from it's usefulness. <br>
-From my personal tests, current implementation is far more faster that `bombardier`s. <br>
+From my personal tests, current implementation is far more faster(lower latencies) that `bombardier`s. <br>
 Please test it yourself!
 
 ---

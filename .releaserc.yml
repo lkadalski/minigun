@@ -28,12 +28,12 @@ verifyConditions:
   - "@semantic-release/github"
   # Verify the presence and the validity of the configuration
   - "@semantic-release/changelog"
-  
-  
+
+
 # Responsible for determining the type of the next release (major, minor or patch).
 # If multiple plugins with a analyzeCommits step are defined, the release type will be
 # the highest one among plugins output.
-# Look details at: https://github.com/semantic-release/commit-analyzer#configuration  
+# Look details at: https://github.com/semantic-release/commit-analyzer#configuration
 analyzeCommits:
   - path: "@semantic-release/commit-analyzer"
     releaseRules:
@@ -63,7 +63,7 @@ analyzeCommits:
         release: false
       - type: test      # Adding missing tests or correcting existing tests
         release: false
-        
+
 # Responsible for generating the content of the release notes.
 # If multiple plugins with a generateNotes step are defined,
 # the release notes will be the result of the concatenation of each plugin output.
@@ -83,7 +83,7 @@ generateNotes:
       types:  # looks like it only works with 'conventionalcommits' preset
         - type: 'build'
           section: '🦊 CI/CD'
-          hidden: true
+          hidden: false
         - type: 'chore'
           section: 'Other'
           hidden: true
@@ -114,7 +114,7 @@ generateNotes:
         - type: 'test'
           section: '🧪 Tests'
           hidden: true
-          
+
 # Responsible for preparing the release, for example creating or updating files
 # such as package.json, CHANGELOG.md, documentation or compiled assets
 # and pushing a commit.
@@ -122,14 +122,14 @@ prepare:
     # Create or update the changelog file in the local project repository
   - path: "@semantic-release/changelog"
     changelogFile: "docs/CHANGELOG.md"
-    
+
     # Push a release commit and tag, including configurable files
   - path: "@semantic-release/git"
-    assets: 
+    assets:
       - 'Cargo.toml'
       - 'docs/CHANGELOG.md'
     message: "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-    
+
 # Responsible for publishing the release.
 publish:
   - path: "@semantic-release/github"
