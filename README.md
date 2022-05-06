@@ -1,34 +1,33 @@
 # <p align="center"> MINIGUN  🦀 </p>
 
 <p align="center">
-  <img src="/docs/images/minigun.svg" width="256" height="256" />
+  <img src="docs/images/minigun.svg" width="256" height="256" />
 </p>
 
 <p align="center">Developed by <a href="https://lkadalski.github.io/" target="_blank">@lkadalski</a></p>
 
 <p align="center">
-  <a href="https://opensource.org/licenses/MIT"
-    ><img
+  <a href="https://opensource.org/licenses/MIT"><img
       src="https://img.shields.io/badge/License-MIT-teal.svg"
       alt="License-MIT"
   /></a>
-  <a href="https://github.com/lkadalski/minigun/stargazers"
-    ><img
+  <a href="https://github.com/lkadalski/minigun/stargazers">
+  <img
       src="https://img.shields.io/github/stars/lkadalski/minigun.svg"
       alt="Repo stars"
   /></a>
-    <a href="https://github.com/lkadalski/minigun/releases"
-    ><img
+    <a href="https://github.com/lkadalski/minigun/releases">
+    <img
       src="https://img.shields.io/github/v/release/lkadalski/minigun?sort=semver"
       alt="Latest version"
   /></a>
-      <a href="https://github.com/lkadalski/minigun/actions/workflows/build.yml"
-    ><img
+      <a href="https://github.com/lkadalski/minigun/actions/workflows/build.yml">
+      <img
       src="https://github.com/lkadalski/minigun/actions/workflows/build.yml/badge.svg"
       alt="Continous Integration"
   /></a>
-      <a href="https://github.com/lkadalski/minigun/releases"
-    ><img
+      <a href="https://github.com/lkadalski/minigun/releases">
+      <img
       src="https://img.shields.io/badge/semantic--release-conventional-e10079?logo=semantic-release"
       alt="Semantic Release: conventional"
   /></a>
@@ -121,7 +120,6 @@ ARGS:
     <url>    Target URL which should Minigun aim for
 ```
 
-
 ---
 
 ## Documentation 📚
@@ -140,13 +138,16 @@ If you have any question or concern, or you want to suggest a new feature, or yo
 How to improve this repo ? Please follow [our contributing guidelines](docs/CONTRIBUTING.md)
 
 ---
-<!--
+
 ## Changelog ⏳
-TBD
-<!-- View minigun's changelog [HERE](docs/CHANGELOG.md) -->
+View minigun's changelog [HERE](docs/CHANGELOG.md)
+
+---
 
 ## License 📃
 
 Minigun is licensed under the MIT license.
 
-You can read the entire license [HERE](docs/LICENSE)
+You can read the entire license [HERE](LICENSE)
+
+Artwork created by Izet
