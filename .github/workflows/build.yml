@@ -178,6 +178,7 @@ jobs:
           extra_plugins: |
             @semantic-release/git
             @semantic-release/changelog
+            @semantic-release/exec
             conventional-changelog-conventionalcommits
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}

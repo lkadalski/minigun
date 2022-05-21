@@ -16,7 +16,8 @@ plugins:
   - "@semantic-release/changelog"
   - "@semantic-release/git"
   - "@semantic-release/github"
-
+  - "@semantic-release/exec"
+  
 # Responsible for verifying conditions necessary to proceed with the release:
 # configuration is correct, authentication tokens are valid, etc...
 verifyConditions:
@@ -119,6 +120,9 @@ generateNotes:
 # such as package.json, CHANGELOG.md, documentation or compiled assets
 # and pushing a commit.
 prepare:
+    # Update version in Cargo.toml
+  - path: "@semantic-release/exec"
+    cmd: "NEXTVERSION=${nextRelease.version} .github/bump-release.sh"
     # Create or update the changelog file in the local project repository
   - path: "@semantic-release/changelog"
     changelogFile: "docs/CHANGELOG.md"
