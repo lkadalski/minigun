@@ -122,7 +122,7 @@ generateNotes:
 prepare:
     # Update version in Cargo.toml
   - path: "@semantic-release/exec"
-    cmd: "NEXTVERSION=${nextRelease.version} .github/bump-release.sh"
+    cmd: "NEXTVERSION=${nextRelease.version} .github/bump_version.sh"
     # Create or update the changelog file in the local project repository
   - path: "@semantic-release/changelog"
     changelogFile: "docs/CHANGELOG.md"
