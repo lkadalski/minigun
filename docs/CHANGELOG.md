@@ -1,3 +1,17 @@
+### [1.7.9](https://github.com/lkadalski/minigun/compare/v1.7.8...v1.7.9) (2022-05-21)
+
+
+### 📔 Docs
+
+* extending readme with changelog ([f2dd7d5](https://github.com/lkadalski/minigun/commit/f2dd7d52d9132c342797ba3d009663053bf39b24))
+* icon added, update in readme ([be0dbd6](https://github.com/lkadalski/minigun/commit/be0dbd66ba73bfe4c930c13e034e202f373d590e))
+
+
+### 🦊 CI/CD
+
+* bump Cargo.toml version automatically ([7659ed3](https://github.com/lkadalski/minigun/commit/7659ed3e1c1e9bf669af4483fe1328ea9c6874fc))
+* update build's verify step ([aef0289](https://github.com/lkadalski/minigun/commit/aef0289b649dc741e8d528db7db991fca224e29c))
+
 ### [1.7.8](https://github.com/lkadalski/minigun/compare/v1.7.7...v1.7.8) (2022-05-02)
 
 ### [1.7.7](https://github.com/lkadalski/minigun/compare/v1.7.6...v1.7.7) (2022-05-01)
