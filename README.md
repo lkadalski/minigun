@@ -31,6 +31,8 @@
       src="https://img.shields.io/badge/semantic--release-conventional-e10079?logo=semantic-release"
       alt="Semantic Release: conventional"
   /></a>
+  <a href="https://codecov.io/gh/lkadalski/minigun"><img src="https://codecov.io/gh/lkadalski/minigun/branch/master/graph/badge.svg?token=VICVX5EAEM"/></a>
+
 <!--   <a href="https://crates.io/crates/minigun"
     ><img
       src="https://img.shields.io/crates/d/minigun.svg"
