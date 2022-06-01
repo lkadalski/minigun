@@ -1,3 +1,19 @@
+## [1.7.10](https://github.com/lkadalski/minigun/compare/v1.7.9...v1.7.10) (2022-06-01)
+
+
+### 📔 Docs
+
+* update codecov badge ([cde5d85](https://github.com/lkadalski/minigun/commit/cde5d85715a2c2af6a1a4f416484225449044903))
+
+
+### 🦊 CI/CD
+
+* **deps:** bump comfy-table from 5.0.1 to 6.0.0 ([bacbe8f](https://github.com/lkadalski/minigun/commit/bacbe8fbb50249267455c6364e64244b84020514))
+* **deps:** bump femme from 2.2.0 to 2.2.1 ([d7df216](https://github.com/lkadalski/minigun/commit/d7df2165b007c33a643f2ed4c6e770964472e237))
+* **deps:** bump http-client from 6.5.1 to 6.5.2 ([1de2184](https://github.com/lkadalski/minigun/commit/1de218480a29b137e7f00f5a2664449a4f9453fb))
+* **deps:** bump log from 0.4.16 to 0.4.17 ([#46](https://github.com/lkadalski/minigun/issues/46)) ([dc5e69e](https://github.com/lkadalski/minigun/commit/dc5e69e3b15f40cb9cba72b0c33d0e5a7628748e))
+* **deps:** bump serde_json from 1.0.80 to 1.0.81 ([8b0d422](https://github.com/lkadalski/minigun/commit/8b0d4222386228d98ac58162f893a114cea2fbe2))
+
 ### [1.7.9](https://github.com/lkadalski/minigun/compare/v1.7.8...v1.7.9) (2022-05-21)
 
 
