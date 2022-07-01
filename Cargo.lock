@@ -1479,7 +1479,7 @@ dependencies = [
 
 [[package]]
 name = "minigun"
-version = "1.7.9"
+version = "1.7.10"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -2005,9 +2005,9 @@ checksum = "8c31b5c4033f8fdde8700e4657be2c497e7288f01515be52168c631e2e4d4086"
 
 [[package]]
 name = "ron"
-version = "0.7.0"
+version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b861ecaade43ac97886a512b360d01d66be9f41f3c61088b42cedf92e03d678"
+checksum = "88073939a61e5b7680558e6be56b419e208420c2adb92be54921fa6b72283f1a"
 dependencies = [
  "base64",
  "bitflags",
