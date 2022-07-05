@@ -1,6 +1,6 @@
 [package]
 name = "minigun"
-version = "1.7.10"
+version = "1.7.11"
 authors = ["lkadalski <kadalski.lukasz@gmail.com>"]
 edition = "2021"
 license = "MIT"
