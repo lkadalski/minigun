@@ -1,6 +1,6 @@
 [package]
 name = "minigun"
-version = "1.7.10"
+version = "1.7.12"
 authors = ["lkadalski <kadalski.lukasz@gmail.com>"]
 edition = "2021"
 license = "MIT"
@@ -20,7 +20,7 @@ log = "0.4.17"
 femme = "2.2.1"
 serde_json = "1.0.82"
 ron = "0.7.1"
-serde = { version = "1.0.137", features = ["derive"] }
+serde = { version = "1.0.140", features = ["derive"] }
 http-client = "6.5.2"
 indicatif = "0.16.2"
 anyhow = "1.0.58"

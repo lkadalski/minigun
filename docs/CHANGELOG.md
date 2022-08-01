@@ -1,3 +1,19 @@
+## [1.7.12](https://github.com/lkadalski/minigun/compare/v1.7.11...v1.7.12) (2022-08-01)
+
+
+### 🦊 CI/CD
+
+* **deps:** bump serde from 1.0.137 to 1.0.140 ([90b54cd](https://github.com/lkadalski/minigun/commit/90b54cd10630ac069bbcdb88506925ff69d6ba6f))
+
+## [1.7.11](https://github.com/lkadalski/minigun/compare/v1.7.10...v1.7.11) (2022-07-05)
+
+
+### 🦊 CI/CD
+
+* **deps:** bump anyhow from 1.0.57 to 1.0.58 ([a304509](https://github.com/lkadalski/minigun/commit/a30450945ae2165be1e450ee4a619a6906624fe5))
+* **deps:** bump async-std from 1.11.0 to 1.12.0 ([aba7bca](https://github.com/lkadalski/minigun/commit/aba7bcae0d62431aa3c96d5c927c6199c6b4c811))
+* **deps:** bump ron from 0.7.0 to 0.7.1 ([d57b7ef](https://github.com/lkadalski/minigun/commit/d57b7ef8669c9e172f7297adfeeb3363c3d7758c))
+
 ## [1.7.10](https://github.com/lkadalski/minigun/compare/v1.7.9...v1.7.10) (2022-06-01)
 
 
