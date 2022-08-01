@@ -1,3 +1,10 @@
+## [1.7.12](https://github.com/lkadalski/minigun/compare/v1.7.11...v1.7.12) (2022-08-01)
+
+
+### 🦊 CI/CD
+
+* **deps:** bump serde from 1.0.137 to 1.0.140 ([90b54cd](https://github.com/lkadalski/minigun/commit/90b54cd10630ac069bbcdb88506925ff69d6ba6f))
+
 ## [1.7.11](https://github.com/lkadalski/minigun/compare/v1.7.10...v1.7.11) (2022-07-05)
 
 
