@@ -1,3 +1,15 @@
+## [1.7.13](https://github.com/lkadalski/minigun/compare/v1.7.12...v1.7.13) (2022-09-13)
+
+
+### 🦊 CI/CD
+
+* **deps:** bump anyhow from 1.0.58 to 1.0.63 ([50fdfab](https://github.com/lkadalski/minigun/commit/50fdfab26067490cd1acbe8ba0b4a183181bc1fa))
+* **deps:** bump futures from 0.3.21 to 0.3.24 ([6a8fd4a](https://github.com/lkadalski/minigun/commit/6a8fd4ab0f8a6978afe72dac69a44bc2b553755a))
+* **deps:** bump serde from 1.0.140 to 1.0.144 ([7b72405](https://github.com/lkadalski/minigun/commit/7b7240515744686789e736c01c1df466bbc37100))
+* **deps:** bump serde_json from 1.0.81 to 1.0.82 ([#50](https://github.com/lkadalski/minigun/issues/50)) ([04bb359](https://github.com/lkadalski/minigun/commit/04bb359432baaeec2317030ff569690517ff4091))
+* **deps:** bump serde_json from 1.0.82 to 1.0.85 ([d82ca69](https://github.com/lkadalski/minigun/commit/d82ca69c9b6d2514159af6ccc0bccf1b2c0b6b2d))
+* **deps:** bump wiremock from 0.5.13 to 0.5.14 ([98f5993](https://github.com/lkadalski/minigun/commit/98f5993421190884ba642208f3cb9eba6de042eb))
+
 ## [1.7.12](https://github.com/lkadalski/minigun/compare/v1.7.11...v1.7.12) (2022-08-01)
 
 
