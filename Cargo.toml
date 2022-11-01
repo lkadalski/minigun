@@ -35,6 +35,6 @@ version = "2.3.1"
 features = ["h1-client", "hyper-client", "wasm-client"]
 
 [dev-dependencies]
-assert_cmd = "2.0.4"
+assert_cmd = "2.0.5"
 wiremock = "0.5.14"
 predicates = "2.0.3"
