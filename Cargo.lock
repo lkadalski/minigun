@@ -1478,7 +1478,7 @@ dependencies = [
 
 [[package]]
 name = "minigun"
-version = "1.7.12"
+version = "1.7.13"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -2989,9 +2989,9 @@ checksum = "d19538ccc21819d01deaf88d6a17eae6596a12e9aafdbb97916fb49896d89de9"
 
 [[package]]
 name = "wiremock"
-version = "0.5.14"
+version = "0.5.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc3c7b7557dbfdad6431b5a51196c9110cef9d83f6a9b26699f35cdc0ae113ec"
+checksum = "631cafe37a030d8453218cf7c650abcc359be8fba4a2fbc5c27fdb9728635406"
 dependencies = [
  "assert-json-diff",
  "async-trait",

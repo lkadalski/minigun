@@ -36,5 +36,5 @@ features = ["h1-client", "hyper-client", "wasm-client"]
 
 [dev-dependencies]
 assert_cmd = "2.0.4"
-wiremock = "0.5.14"
+wiremock = "0.5.16"
 predicates = "2.0.3"
