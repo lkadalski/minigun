@@ -23,7 +23,7 @@ ron = "0.8.0"
 serde = { version = "1.0.144", features = ["derive"] }
 http-client = "6.5.2"
 indicatif = "0.16.2"
-anyhow = "1.0.63"
+anyhow = "1.0.68"
 mockito = "0.31.0"
 
 [dependencies.async-std]
