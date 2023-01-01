@@ -14,7 +14,7 @@ readme = "README.md"
 [dependencies]
 structopt = "0.3.25"
 futures = "0.3.24"
-comfy-table = "6.1.0"
+comfy-table = "6.1.4"
 itertools = "0.10.1"
 log = "0.4.17"
 femme = "2.2.1"
