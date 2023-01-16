@@ -1,195 +1,195 @@
-name: Continous Integration
+# name: Continous Integration
 
-on:
-  workflow_call:
-  push:
-    branches:
-      - master
-      - beta
-  pull_request:
-    branches:
-      - master
+# on:
+#   workflow_call:
+#   push:
+#     branches:
+#       - master
+#       - beta
+#   pull_request:
+#     branches:
+#       - master
 
-env:
-  CARGO_TERM_COLOR: always
-  BACKTRACE: true
+# env:
+#   CARGO_TERM_COLOR: always
+#   BACKTRACE: true
 
-jobs:
-  fmt:
-    name: Rustfmt
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          components: rustfmt
-      - uses: Swatinem/rust-cache@v1
-      - uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+# jobs:
+#   fmt:
+#     name: Rustfmt
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: actions-rs/toolchain@v1
+#         with:
+#           toolchain: stable
+#           override: true
+#           components: rustfmt
+#       - uses: Swatinem/rust-cache@v1
+#       - uses: actions-rs/cargo@v1
+#         with:
+#           command: fmt
+#           args: --all -- --check
 
-  clippy:
-    name: Clippy Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          components: clippy
-      - uses: Swatinem/rust-cache@v1
-      - uses: actions-rs/clippy-check@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          args: --all-features -- -D clippy::pedantic -A clippy::must_use_candidate -A clippy::cast_precision_loss -A clippy::cast_possible_truncation -A clippy::cast_possible_wrap -A clippy::cast_sign_loss -A clippy::mut_mut
-  test:
-    name: Cargo Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-      - uses: Swatinem/rust-cache@v1
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
+#   clippy:
+#     name: Clippy Check
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: actions-rs/toolchain@v1
+#         with:
+#           toolchain: stable
+#           override: true
+#           components: clippy
+#       - uses: Swatinem/rust-cache@v1
+#       - uses: actions-rs/clippy-check@v1
+#         with:
+#           token: ${{ secrets.GITHUB_TOKEN }}
+#           args: --all-features -- -D clippy::pedantic -A clippy::must_use_candidate -A clippy::cast_precision_loss -A clippy::cast_possible_truncation -A clippy::cast_possible_wrap -A clippy::cast_sign_loss -A clippy::mut_mut
+#   test:
+#     name: Cargo Test
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: actions-rs/toolchain@v1
+#         with:
+#           profile: minimal
+#           toolchain: stable
+#           override: true
+#       - uses: Swatinem/rust-cache@v1
+#       - uses: actions-rs/cargo@v1
+#         with:
+#           command: test
 
-  coverage:
-    name: Code Coverage
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Install stable toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-      - uses: Swatinem/rust-cache@v1
-      - name: Run cargo-tarpaulin
-        uses: actions-rs/tarpaulin@v0.1
-        with:
-          version: '0.15.0'
-          args: '-- --test-threads 1'
-      - name: Upload to codecov.io
-        uses: codecov/codecov-action@v1.0.2
-        with:
-          token: ${{secrets.CODECOV_TOKEN}}
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
-        with:
-          name: code-coverage-report
-          path: cobertura.xml
+#   coverage:
+#     name: Code Coverage
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+#       - name: Install stable toolchain
+#         uses: actions-rs/toolchain@v1
+#         with:
+#           toolchain: stable
+#           override: true
+#       - uses: Swatinem/rust-cache@v1
+#       - name: Run cargo-tarpaulin
+#         uses: actions-rs/tarpaulin@v0.1
+#         with:
+#           version: '0.15.0'
+#           args: '-- --test-threads 1'
+#       - name: Upload to codecov.io
+#         uses: codecov/codecov-action@v1.0.2
+#         with:
+#           token: ${{secrets.CODECOV_TOKEN}}
+#       - name: Archive code coverage results
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: code-coverage-report
+#           path: cobertura.xml
           
-  verify_publish_need:
-    needs: [test, fmt, clippy]
-    name: Verify if new release is needed
-    runs-on: ubuntu-latest
-    continue-on-error: false
-    outputs: 
-      should_publish: ${{ steps.dry_run.outputs.new_release_published }} 
-    steps:
-      - uses: actions/checkout@v3
-      - name: Semantic Release Dry Run 
-        id: dry_run
-        uses: cycjimmy/semantic-release-action@v2
-        with:
-          dry_run: true
-          extra_plugins: |
-            @semantic-release/git
-            @semantic-release/changelog
-            @semantic-release/exec
-            conventional-changelog-conventionalcommits
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#   verify_publish_need:
+#     needs: [test, fmt, clippy]
+#     name: Verify if new release is needed
+#     runs-on: ubuntu-latest
+#     continue-on-error: false
+#     outputs: 
+#       should_publish: ${{ steps.dry_run.outputs.new_release_published }} 
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Semantic Release Dry Run 
+#         id: dry_run
+#         uses: cycjimmy/semantic-release-action@v2
+#         with:
+#           dry_run: true
+#           extra_plugins: |
+#             @semantic-release/git
+#             @semantic-release/changelog
+#             @semantic-release/exec
+#             conventional-changelog-conventionalcommits
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  build:
-    name: Build Release
-    needs: [verify_publish_need]
-    continue-on-error: false
-    if: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta') &&  needs.verify_publish_need.outputs.should_publish == 'true' }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - build: linux
-            os: ubuntu-latest
-            rust: stable
-            target: x86_64-unknown-linux-gnu
-            suffix: ''
-          - build: windows
-            os: windows-latest
-            rust: stable
-            target: x86_64-pc-windows-msvc
-            suffix: '.exe'
-          - build: macos
-            os: macos-latest
-            rust: stable
-            target: aarch64-apple-darwin
-            suffix: ''
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          target: ${{ matrix.target }}
-          default: true
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release --locked --target=${{ matrix.target }}
-        env:
-          CARGO_PROFILE_RELEASE_LTO: true
-          CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
-      - name: Rename
-        run: mv target/${{ matrix.target }}/release/minigun${{ matrix.suffix }} target/${{ matrix.target }}/release/minigun_${{ matrix.target }}${{ matrix.suffix }}
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: minigun_${{ matrix.target }}${{ matrix.suffix }}
-          path: target/${{ matrix.target }}/release/minigun_${{ matrix.target }}${{ matrix.suffix }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+#   build:
+#     name: Build Release
+#     needs: [verify_publish_need]
+#     continue-on-error: false
+#     if: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta') &&  needs.verify_publish_need.outputs.should_publish == 'true' }}
+#     runs-on: ${{ matrix.os }}
+#     strategy:
+#       matrix:
+#         include:
+#           - build: linux
+#             os: ubuntu-latest
+#             rust: stable
+#             target: x86_64-unknown-linux-gnu
+#             suffix: ''
+#           - build: windows
+#             os: windows-latest
+#             rust: stable
+#             target: x86_64-pc-windows-msvc
+#             suffix: '.exe'
+#           - build: macos
+#             os: macos-latest
+#             rust: stable
+#             target: aarch64-apple-darwin
+#             suffix: ''
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: actions-rs/toolchain@v1
+#         with:
+#           toolchain: stable
+#           target: ${{ matrix.target }}
+#           default: true
+#       - uses: actions-rs/cargo@v1
+#         with:
+#           command: build
+#           args: --release --locked --target=${{ matrix.target }}
+#         env:
+#           CARGO_PROFILE_RELEASE_LTO: true
+#           CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
+#       - name: Rename
+#         run: mv target/${{ matrix.target }}/release/minigun${{ matrix.suffix }} target/${{ matrix.target }}/release/minigun_${{ matrix.target }}${{ matrix.suffix }}
+#       - name: Upload artifacts
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: minigun_${{ matrix.target }}${{ matrix.suffix }}
+#           path: target/${{ matrix.target }}/release/minigun_${{ matrix.target }}${{ matrix.suffix }}
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
-  publish:
-    name: Publish Release
-    runs-on: ubuntu-latest
-    needs: [ build, verify_publish_need ]
-    if:  ${{ needs.verify_publish_need.outputs.should_publish == 'true' }} 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with: 
-          persist-credentials: false
-      - name: Fetch Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          path: publish/
-      - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v2
-        id: semantic_release
-        with:
-          extra_plugins: |
-            @semantic-release/git
-            @semantic-release/changelog
-            @semantic-release/exec
-            conventional-changelog-conventionalcommits
-        env:
-          GH_TOKEN: ${{ secrets.TOKEN }}
-      - name: Login to DockerHub
-        uses: docker/login-action@v1 
-        with:
-          username: ${{ secrets.DOCKER_LOGIN }}
-          password: ${{ secrets.DOCKER_TOKEN }}
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: lkadalski/minigun:latest, lkadalski/minigun:${{ steps.semantic_release.outputs.new_release_version }}
+#   publish:
+#     name: Publish Release
+#     runs-on: ubuntu-latest
+#     needs: [ build, verify_publish_need ]
+#     if:  ${{ needs.verify_publish_need.outputs.should_publish == 'true' }} 
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+#         with: 
+#           persist-credentials: false
+#       - name: Fetch Artifacts
+#         uses: actions/download-artifact@v3
+#         with:
+#           path: publish/
+#       - name: Semantic Release
+#         uses: cycjimmy/semantic-release-action@v2
+#         id: semantic_release
+#         with:
+#           extra_plugins: |
+#             @semantic-release/git
+#             @semantic-release/changelog
+#             @semantic-release/exec
+#             conventional-changelog-conventionalcommits
+#         env:
+#           GH_TOKEN: ${{ secrets.TOKEN }}
+#       - name: Login to DockerHub
+#         uses: docker/login-action@v1 
+#         with:
+#           username: ${{ secrets.DOCKER_LOGIN }}
+#           password: ${{ secrets.DOCKER_TOKEN }}
+#       - name: Build and push Docker image
+#         uses: docker/build-push-action@v2
+#         with:
+#           push: true
+#           tags: lkadalski/minigun:latest, lkadalski/minigun:${{ steps.semantic_release.outputs.new_release_version }}

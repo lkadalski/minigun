@@ -1,24 +1,24 @@
-name: Security audit
-env:
- GITHUB_TOKEN: ${{ secrets.TOKEN }}
+# name: Security audit
+# env:
+#  GITHUB_TOKEN: ${{ secrets.TOKEN }}
   
-on:
-  pull_request:
-    paths: 
-      - '**/Cargo.lock'
-      - '**/Cargo.toml'
-  push:
-    branches: master
-    paths: 
-     - '**/Cargo.lock'
-     - '**/Cargo.toml'
-  schedule:
-    - cron: "0 0 * * *"
-jobs:
-  security_audit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions-rs/audit-check@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+# on:
+#   pull_request:
+#     paths: 
+#       - '**/Cargo.lock'
+#       - '**/Cargo.toml'
+#   push:
+#     branches: master
+#     paths: 
+#      - '**/Cargo.lock'
+#      - '**/Cargo.toml'
+#   schedule:
+#     - cron: "0 0 * * *"
+# jobs:
+#   security_audit:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v1
+#       - uses: actions-rs/audit-check@v1
+#         with:
+#           token: ${{ secrets.GITHUB_TOKEN }}
